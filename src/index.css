@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@font-face {
+    font-family: "ReservationWide";
+    src: url(./shared/assets/fonts/ReservationWide-Regular.ttf)
+        format("truetype");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "ReservationWide";
+    src: url(./shared/assets/fonts/ReservationWide-Bold.ttf) format("truetype");
+    font-weight: 700;
+}
+@font-face {
+    font-family: "Syne";
+    src: url(./shared/assets/fonts/Syne.ttf) format("truetype");
+    font-weight: 400;
+}
+
+@theme {
+    --font-reservation: ReservationWide, sans-serif;
+    --font-syne: Syne, sans-serif;
+}
+
+:root {
+    margin: 0;
+    padding: 0;
+    color-scheme: light;
+}
+
+* {
+    box-sizing: border-box;
+    /* font-family: ReservationWide, Arial, sans-serif; */
+}
