@@ -1,9 +1,23 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import RegistrationSchema from "../schema/RegistrationSchema";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { registerUser } from "../api";
 
 const Registration = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+        try {
+            await registerUser(values);
+            navigate("/login"); // Redirect to login after successful registration
+        } catch (error) {
+            setFieldError("username", error.message || "Registration failed");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <div className="Container font-syne flex flex-col items-center justify-center h-dvh">
             <div className="flex flex-row size-fit w-full max-w-4xl shadow-[0_0_30px_rgba(0,0,0,0.2)] rounded-2xl overflow-hidden">
@@ -17,10 +31,7 @@ const Registration = () => {
                     }}
                     validationSchema={RegistrationSchema}
                     validateOnChange={false}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log(values);
-                        setSubmitting(false);
-                    }}
+                    onSubmit={handleSubmit}
                 >
                     {({ values, errors, touched, isSubmitting }) => (
                         <Form className="flex flex-col items-center p-10 gap-y-5 w-1/2">

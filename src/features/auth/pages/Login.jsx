@@ -1,22 +1,39 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import LoginSchema from "../schema/LoginSchema";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import Cookies from "js-cookie";
+import { loginUser } from "../api";
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+        try {
+            const { token, userId, username } = await loginUser(values);
+
+            // Store token in cookie (expires in 1 day)
+            Cookies.set("token", token, { expires: 1 });
+
+            // Redirect to home
+            navigate("/home");
+        } catch (error) {
+            setFieldError("username", "Invalid credentials");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <div className="Container font-syne flex flex-col items-center justify-center h-dvh">
             <div className="flex flex-row size-fit w-full max-w-4xl shadow-[0_0_30px_rgba(0,0,0,0.2)] rounded-2xl overflow-hidden">
                 <Formik
                     initialValues={{
-                        identifier: "",
+                        username: "",
                         password: "",
                     }}
                     validationSchema={LoginSchema}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log(values);
-                        setSubmitting(false);
-                    }}
+                    onSubmit={handleSubmit}
                 >
                     {({ values, errors, touched, isSubmitting }) => (
                         <Form className="flex flex-col items-center p-10 gap-y-5 w-1/2">
@@ -26,13 +43,13 @@ const Login = () => {
                             <div className="flex flex-col w-full">
                                 <Field
                                     type="text"
-                                    name="identifier"
-                                    placeholder="Enter Username or Email"
+                                    name="username"
+                                    placeholder="Enter Username"
                                     autoComplete="off"
                                     className="border border-gray-300 rounded-full px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-300"
                                 />
                                 <ErrorMessage
-                                    name="identifier"
+                                    name="username"
                                     component="div"
                                     className="text-red-400 text-sm mt-1 pl-4"
                                 />
