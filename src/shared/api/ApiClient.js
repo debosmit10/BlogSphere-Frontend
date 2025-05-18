@@ -13,6 +13,10 @@ const ApiClient = axios.create({
     withCredentials: true, // Required for cookies/JWT
 });
 
+export const getFileUrl = (type, filename) => {
+    return `${API_BASE_URL}/files/${type}/${filename}`;
+};
+
 // Request interceptor
 ApiClient.interceptors.request.use((config) => {
     const token = Cookies.get("token");
