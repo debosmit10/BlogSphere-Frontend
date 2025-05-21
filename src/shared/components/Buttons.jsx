@@ -10,3 +10,9 @@ export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
         <span className="text-xl ">{label}</span>
     </button>
 );
+
+export const FollowButton = () => (
+    <button className="px-2 py-0.5 rounded-full border hover:bg-black hover:text-white transition-colors duration-200">
+        <span>Follow</span>
+    </button>
+);
