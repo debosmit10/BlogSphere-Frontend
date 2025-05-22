@@ -23,6 +23,10 @@ ApiClient.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
+    if (!(config.data instanceof FormData)) {
+        config.headers["Content-Type"] = "application/json";
+    }
     return config;
 });
 
