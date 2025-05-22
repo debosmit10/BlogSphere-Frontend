@@ -16,14 +16,11 @@ const AppRoutes = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
 
-            {/* Temporary Public Routes */}
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/write" element={<Write />} />
-            <Route path="/writemock" element={<WriteMock />} />
-
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<Home />} />
+                <Route path="/blog/:id" element={<Blog />} />
+                <Route path="/write" element={<Write />} />
             </Route>
 
             {/* 404 Fallback */}
