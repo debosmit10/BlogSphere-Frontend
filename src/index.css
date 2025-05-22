@@ -28,6 +28,12 @@
     --font-roboto: Roboto, sans-serif;
 }
 
+@utility scrollbar-hidden {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 :root {
     margin: 0;
     padding: 0;

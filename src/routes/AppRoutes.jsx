@@ -4,6 +4,9 @@ import Landing from "../features/landing/pages/LandingPage";
 import Login from "../features/auth/pages/Login";
 import Registration from "../features/auth/pages/Registration";
 import Home from "../features/home/pages/Home";
+import Blog from "../features/blog/pages/Blog";
+import Write from "../features/blog/pages/Write";
+import WriteMock from "../features/blog/pages/WriteMock";
 
 const AppRoutes = () => {
     return (
@@ -16,7 +19,8 @@ const AppRoutes = () => {
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<Home />} />
-                {/* Add more protected routes here */}
+                <Route path="/blog/:id" element={<Blog />} />
+                <Route path="/write" element={<Write />} />
             </Route>
 
             {/* 404 Fallback */}
