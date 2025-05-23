@@ -18,7 +18,7 @@ const About = () => {
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 {/* Our Story */}
-                <section className="mb-20">
+                <section className="mb-10">
                     <h2 className="font-reservation text-3xl font-bold mb-6 border-b-2 border-black pb-2 inline-block">
                         Our Story
                     </h2>
@@ -41,7 +41,7 @@ const About = () => {
                                 thousands who appreciate substance over style.
                             </p>
                         </div>
-                        <div className="bg-gray-100 h-64 md:h-96 flex items-center justify-center">
+                        <div className="bg-gray-100 h-70 md:h-80 flex items-center justify-center">
                             <span className="text-gray-500 text-lg">
                                 Founding team photo or illustration
                             </span>
@@ -50,7 +50,7 @@ const About = () => {
                 </section>
 
                 {/* Our Philosophy */}
-                <section className="mb-20 bg-black text-white p-12">
+                <section className="mb-10 bg-black text-white p-12">
                     <h2 className="font-reservation text-3xl font-bold mb-8 text-center">
                         Our Philosophy
                     </h2>
@@ -85,8 +85,8 @@ const About = () => {
                 </section>
 
                 {/* The Platform */}
-                <section className="mb-20">
-                    <h2 className="font-reservation text-3xl font-bold mb-6 border-b-2 border-black pb-2 inline-block">
+                <section className="mb-10">
+                    <h2 className="font-reservation text-3xl font-bold mb-6 border-b-1 border-black pb-2 inline-block">
                         The Platform
                     </h2>
                     <div className="space-y-8">
@@ -125,31 +125,36 @@ const About = () => {
                 </section>
 
                 {/* The Team */}
-                <section className="mb-20">
+                <section className="mb-10">
                     <h2 className="font-reservation text-3xl font-bold mb-12 border-b-2 border-black pb-2 inline-block">
                         The Minds Behind BlogSphere
                     </h2>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
                         {[
                             {
-                                name: "Alex Morgan",
-                                role: "Founder & Editor",
-                                bio: "Former journalist who craved a platform for substantial writing.",
+                                name: "Somik Acharjee",
+                                role: "Founder & Frontend Developer",
+                                bio: "Crafts pixel-perfect, user-friendly interfaces.",
                             },
                             {
-                                name: "Samira Chen",
-                                role: "CTO",
-                                bio: "Built our infrastructure to be as elegant as our design.",
+                                name: "Debosmit Karmakar",
+                                role: "Founder & Full-Stack Developer",
+                                bio: "Leads the vision while building robust end-to-end systems.",
                             },
                             {
-                                name: "Jordan Blake",
-                                role: "Community Lead",
-                                bio: "Fosters connections between our writers and readers.",
+                                name: "Shantonu Ganguly",
+                                role: "Backend Developer",
+                                bio: "Ensures seamless server logic and database performance.",
                             },
                             {
-                                name: "Taylor Reyes",
-                                role: "Product Designer",
-                                bio: "Ensures every pixel serves the content.",
+                                name: "Rahul Adhya",
+                                role: "Frontend Developer",
+                                bio: "Turns designs into responsive experiences.",
+                            },
+                            {
+                                name: "Sanket Adhikary",
+                                role: "Frontend Developer",
+                                bio: "Turns designs into responsive experiences.",
                             },
                         ].map((member, index) => (
                             <div
