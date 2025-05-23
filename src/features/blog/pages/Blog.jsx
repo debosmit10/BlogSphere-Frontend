@@ -12,12 +12,16 @@ import {
 import Comment from "../components/Comment";
 import ApiClient, { getFileUrl } from "../../../shared/api/ApiClient";
 import { formatDate } from "../../../shared/utils/dateUtils";
+import { getLikeStatus, getLikeCount, toggleLike } from "../api";
 
 const Blog = () => {
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+    const [isLikeLoading, setIsLikeLoading] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -33,6 +37,51 @@ const Blog = () => {
 
         fetchBlog();
     }, [id]);
+
+    // Fetch like status and count when blog data is loaded
+    useEffect(() => {
+        const fetchLikeData = async () => {
+            if (!id) return;
+
+            try {
+                // Fetch like status and count in parallel
+                const [status, count] = await Promise.all([
+                    getLikeStatus(id),
+                    getLikeCount(id),
+                ]);
+
+                setIsLiked(status);
+                setLikeCount(count);
+            } catch (error) {
+                console.error("Error fetching like data:", error);
+            }
+        };
+
+        if (!loading && !error && blog) {
+            fetchLikeData();
+        }
+    }, [id, loading, error, blog]);
+
+    // Handle like button click
+    const handleLikeClick = async () => {
+        if (!id || isLikeLoading) return;
+
+        setIsLikeLoading(true);
+        try {
+            await toggleLike(id);
+            // Update UI optimistically
+            setIsLiked(!isLiked);
+            setLikeCount((prevCount) =>
+                isLiked ? prevCount - 1 : prevCount + 1
+            );
+        } catch (error) {
+            console.error("Error toggling like:", error);
+            // Revert UI changes if API call fails
+            alert("Failed to update like status. Please try again.");
+        } finally {
+            setIsLikeLoading(false);
+        }
+    };
 
     if (loading) return <div className="p-4">Loading blog...</div>;
     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
@@ -87,10 +136,30 @@ const Blog = () => {
                                 </div>
                                 <div className="flex flex-row space-x-3 items-center">
                                     <span>{formatDate(blog.createdAt)}</span>
-                                    <button className="flex flex-row space-x-2">
-                                        <PiThumbsUp className="text-2xl" />
-                                        <span>0</span>
-                                    </button>
+                                    <div className="flex flex-row space-x-2 items-center transition-colors duration-200 ease-in-out">
+                                        <button
+                                            onClick={handleLikeClick}
+                                            disabled={isLikeLoading}
+                                            aria-label={
+                                                isLiked
+                                                    ? "Unlike post"
+                                                    : "Like post"
+                                            }
+                                        >
+                                            {isLiked ? (
+                                                <PiThumbsUpFill className="text-2xl text-blue-600" />
+                                            ) : (
+                                                <PiThumbsUp className="text-2xl hover:text-blue-600" />
+                                            )}
+                                        </button>
+                                        <span
+                                            className={
+                                                isLiked ? "text-blue-600" : ""
+                                            }
+                                        >
+                                            {likeCount}
+                                        </span>
+                                    </div>
                                     <button>
                                         <PiBookmarksSimple className="text-2xl" />
                                     </button>
