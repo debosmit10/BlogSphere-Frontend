@@ -6,7 +6,6 @@ import Registration from "../features/auth/pages/Registration";
 import Home from "../features/home/pages/Home";
 import Blog from "../features/blog/pages/Blog";
 import Write from "../features/blog/pages/Write";
-import WriteMock from "../features/blog/pages/WriteMock";
 
 const AppRoutes = () => {
     return (
