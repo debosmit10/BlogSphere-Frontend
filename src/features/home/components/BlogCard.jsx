@@ -10,6 +10,7 @@ import {
 } from "react-icons/pi";
 import { Link } from "react-router";
 import { getFileUrl } from "../../../shared/api/ApiClient";
+import { formatDate } from "../../../shared/utils/dateUtils";
 import { getLikeStatus, getLikeCount, toggleLike } from "../../blog/api";
 
 const BlogCard = ({ blog }) => {
@@ -99,11 +100,7 @@ const BlogCard = ({ blog }) => {
                 </Link>
                 <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row items-center space-x-4">
-                        <span>
-                            {blog.createdAt
-                                ? new Date(blog.createdAt).toLocaleDateString()
-                                : ""}
-                        </span>
+                        <span>{formatDate(blog.createdAt)}</span>
                         <div className="flex flex-row space-x-2 items-center">
                             <button
                                 onClick={handleLikeClick}
