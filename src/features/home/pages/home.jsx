@@ -3,6 +3,7 @@ import Header from "../../../shared/components/header";
 import LeftBar from "../components/LeftBar";
 import MiddleBar from "../components/MiddleBar";
 import RightBar from "../components/RightBar";
+import Saved from "../components/Saved";
 
 const home = () => {
     return (
@@ -14,6 +15,7 @@ const home = () => {
                 </div>
                 <div className="Middle-bar w-1/2">
                     <MiddleBar />
+                    <Saved />
                 </div>
                 <div className="Right-bar w-3/10 border-l border-neutral-200">
                     <RightBar />

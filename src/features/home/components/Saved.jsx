@@ -1,15 +1,17 @@
 import React from "react";
-import Feed from "./Feed";
+import BlogCard from "./BlogCard";
 
-const MiddleBar = () => {
+const Saved = () => {
     return (
         <div className="p-7">
             <h1 className="pb-5 font-reservation font-bold text-2xl border-b border-neutral-200">
-                For you
+                Saved
             </h1>
-            <Feed />
+            <div>
+                <BlogCard />
+            </div>
         </div>
     );
 };
 
-export default MiddleBar;
+export default Saved;
