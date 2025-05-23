@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import Landing from "../features/landing/pages/LandingPage";
+import About from "../features/misc/pages/About";
+import Contact from "../features/misc/pages/Contact";
 import Login from "../features/auth/pages/Login";
 import Registration from "../features/auth/pages/Registration";
 import Home from "../features/home/pages/Home";
@@ -12,6 +14,8 @@ const AppRoutes = () => {
         <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Landing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
 
