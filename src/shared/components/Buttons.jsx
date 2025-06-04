@@ -12,7 +12,7 @@ export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
 );
 
 export const FollowButton = () => (
-    <button className="px-2 py-0.5 rounded-full border hover:bg-black hover:text-white transition-colors duration-200">
+    <button className="px-2 py-0.5 rounded-full border hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer">
         <span>Follow</span>
     </button>
 );

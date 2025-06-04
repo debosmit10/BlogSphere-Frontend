@@ -12,7 +12,13 @@ import {
 import Comment from "../components/Comment";
 import ApiClient, { getFileUrl } from "../../../shared/api/ApiClient";
 import { formatDate } from "../../../shared/utils/dateUtils";
-import { getLikeStatus, getLikeCount, toggleLike } from "../api";
+import {
+    getLikeStatus,
+    getLikeCount,
+    toggleLike,
+    getSavedStatus,
+    toggleSavedStatus,
+} from "../../blog/api";
 
 const Blog = () => {
     const { id } = useParams();
@@ -22,6 +28,8 @@ const Blog = () => {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [isLikeLoading, setIsLikeLoading] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const [isSaveLoading, setIsSaveLoading] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -38,20 +46,24 @@ const Blog = () => {
         fetchBlog();
     }, [id]);
 
-    // Fetch like status and count when blog data is loaded
+    // Fetch like and save status and count when blog data is loaded
     useEffect(() => {
         const fetchLikeData = async () => {
             if (!id) return;
 
             try {
-                // Fetch like status and count in parallel
-                const [status, count] = await Promise.all([
-                    getLikeStatus(id),
-                    getLikeCount(id),
-                ]);
+                // Fetch like status, like count, and saved status in parallel
+                const [likeStatus, likesCount, savedStatus] = await Promise.all(
+                    [
+                        getLikeStatus(blog.id),
+                        getLikeCount(blog.id),
+                        getSavedStatus(blog.id),
+                    ]
+                );
 
-                setIsLiked(status);
-                setLikeCount(count);
+                setIsLiked(likeStatus);
+                setLikeCount(likesCount);
+                setIsSaved(savedStatus);
             } catch (error) {
                 console.error("Error fetching like data:", error);
             }
@@ -80,6 +92,23 @@ const Blog = () => {
             alert("Failed to update like status. Please try again.");
         } finally {
             setIsLikeLoading(false);
+        }
+    };
+
+    // Handle save button click
+    const handleSaveClick = async () => {
+        if (!blog?.id || isSaveLoading) return;
+
+        setIsSaveLoading(true);
+        try {
+            const newSavedStatus = await toggleSavedStatus(blog.id);
+            // Update UI based on API response
+            setIsSaved(newSavedStatus);
+        } catch (error) {
+            console.error("Error toggling saved status:", error);
+            alert("Failed to update saved status. Please try again.");
+        } finally {
+            setIsSaveLoading(false);
         }
     };
 
@@ -145,6 +174,7 @@ const Blog = () => {
                                                     ? "Unlike post"
                                                     : "Like post"
                                             }
+                                            className="cursor-pointer"
                                         >
                                             {isLiked ? (
                                                 <PiThumbsUpFill className="text-2xl text-blue-600" />
@@ -160,8 +190,21 @@ const Blog = () => {
                                             {likeCount}
                                         </span>
                                     </div>
-                                    <button>
-                                        <PiBookmarksSimple className="text-2xl" />
+                                    <button
+                                        onClick={handleSaveClick}
+                                        disabled={isSaveLoading}
+                                        aria-label={
+                                            isSaved
+                                                ? "Unsave post"
+                                                : "Save post"
+                                        }
+                                        className="cursor-pointer"
+                                    >
+                                        {isSaved ? (
+                                            <PiBookmarksSimpleFill className="text-2xl text-blue-600" />
+                                        ) : (
+                                            <PiBookmarksSimple className="text-2xl hover:text-blue-600" />
+                                        )}
                                     </button>
                                     <button>
                                         <PiDotsThreeBold className="text-2xl" />
