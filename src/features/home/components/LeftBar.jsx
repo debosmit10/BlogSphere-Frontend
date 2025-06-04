@@ -10,7 +10,15 @@ import { LeftbarButton } from "../../../shared/components/Buttons";
 import ContinueReadingCard from "./ContinueReadingCard";
 import { Link } from "react-router";
 
-const LeftBar = () => {
+const LeftBar = ({ activeView, setActiveView }) => {
+    const handleFeedClick = () => {
+        setActiveView("feed");
+    };
+
+    const handleSavedClick = () => {
+        setActiveView("saved");
+    };
+
     return (
         <div className="p-5 sticky top-16">
             <ul className="pb-5 border-b border-neutral-200 ">
@@ -19,6 +27,7 @@ const LeftBar = () => {
                         <LeftbarButton
                             icon={PiSquareSplitVertical}
                             label="Feed"
+                            onClick={handleFeedClick}
                         />
                     </Link>
                 </li>
@@ -35,7 +44,11 @@ const LeftBar = () => {
                     <LeftbarButton icon={PiNote} label="Drafts" />
                 </li>
                 <li>
-                    <LeftbarButton icon={PiBookmarksSimple} label="Saved" />
+                    <LeftbarButton
+                        icon={PiBookmarksSimple}
+                        label="Saved"
+                        onClick={handleSavedClick}
+                    />
                 </li>
             </ul>
             <div className="flex px-3 pt-7 pb-3 items-center space-x-2 text-xl">
