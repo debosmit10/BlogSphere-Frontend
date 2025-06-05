@@ -171,7 +171,7 @@ const Write = () => {
                                                                                 false
                                                                             );
                                                                         }}
-                                                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+                                                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800 transition-colors duration-200"
                                                                     >
                                                                         {
                                                                             topic.displayName
