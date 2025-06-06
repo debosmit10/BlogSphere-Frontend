@@ -2,23 +2,57 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import LoginSchema from "../schema/LoginSchema";
 import { Link, useNavigate } from "react-router";
-import Cookies from "js-cookie";
 import { loginUser } from "../api";
+import { useAuth } from "../../../shared/contexts/AuthContext"; // Import useAuth hook
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useAuth(); // Get login function from context
 
-    const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+    const handleSubmit = async (
+        values,
+        { setSubmitting, setFieldError, setFieldValue }
+    ) => {
         try {
-            const { token, userId, username } = await loginUser(values);
+            console.log("Login attempt with:", values);
+            // **API returns a FLAT object like:**
+            // { token: "...", userId: 1, username: "user1", profilePictureUrl: "url_or_null", name: "User Name", email: "...", role: "..." }
+            const response = await loginUser(values);
+            console.log("Login API response:", response);
 
-            // Store token in cookie (expires in 1 day)
-            Cookies.set("token", token, { expires: 1 });
+            // **FIX:** Check for token and essential user info (e.g., username) in the FLAT response
+            if (!response || !response.token || !response.username) {
+                console.error(
+                    "Login Error: Invalid response structure or missing token/username from loginUser API.",
+                    response
+                );
+                setFieldError("username", "Login failed. Please try again."); // Generic error
+                return; // Stop execution
+            }
 
-            // Redirect to home
+            const { token, ...userData } = response; // Destructure token, rest is userData
+
+            // Ensure profilePictureUrl exists, even if null, for consistency
+            if (!userData.hasOwnProperty("profilePictureUrl")) {
+                userData.profilePictureUrl = null;
+            }
+
+            console.log("Extracted token:", token);
+            console.log("Constructed userData:", userData);
+
+            // Call the login function from AuthContext with token and the constructed userData object
+            login(token, userData);
+
+            console.log("Login successful, navigating to /home");
+            // Redirect to home after successful login
             navigate("/home");
         } catch (error) {
-            setFieldError("username", "Invalid credentials");
+            // Handle login errors (e.g., invalid credentials)
+            console.error("Login failed:", error);
+            // Provide specific feedback if possible, otherwise generic
+            setFieldError("username", "Invalid username or password");
+            // Clear password field on error for security
+            setFieldValue("password", "");
         } finally {
             setSubmitting(false);
         }
@@ -35,7 +69,7 @@ const Login = () => {
                     validationSchema={LoginSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, errors, touched, isSubmitting }) => (
+                    {({ errors, touched, isSubmitting }) => (
                         <Form className="flex flex-col items-center p-10 gap-y-5 w-1/2">
                             <h1 className="font-reservation font-bold text-5xl self-start">
                                 Login.

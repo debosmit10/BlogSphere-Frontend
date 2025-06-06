@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SearchBar from "./SearchBar";
 import {
     PiNotePencil,
@@ -12,11 +12,25 @@ import {
 } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
 import Hamburger from "hamburger-react";
-import { logoutUser } from "../../features/auth/api";
+// import { logoutUser } from "../../features/auth/api";
+import { useAuth } from "../contexts/AuthContext";
+import { getFileUrl } from "../api/ApiClient";
 
 const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef();
+    const { user, logout, isAuthenticated, isLoading } = useAuth(); // Get user and logout from context
+    const navigate = useNavigate(); // Hook for navigation
+
+    // --- Construct Profile Picture URL using getFileUrl ---
+    const defaultProfilePic =
+        "https://placehold.co/100/cccccc/FFFFFF?text=User"; // Default/fallback image
+
+    // Use getFileUrl to construct the full URL if profilePictureUrl (filename) exists
+    const fullProfilePicUrl = user?.profilePictureUrl
+        ? getFileUrl("profile-pictures", user.profilePictureUrl) // Use the utility function
+        : defaultProfilePic;
+    // --- End Construct Profile Picture URL ---
 
     // Close menu when clicking outside
     useEffect(() => {
@@ -38,6 +52,12 @@ const Header = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const handleLogout = () => {
+        logout();
+        setMenuOpen(false);
+        navigate("/login");
+    };
 
     return (
         <nav className="sticky top-0 z-50 h-16 bg-white border-b border-neutral-200">
@@ -65,9 +85,18 @@ const Header = () => {
                             <PiNotification className="text-2xl text-neutral-500" />
                         </Link>
                         <img
-                            src="https://placehold.co/100"
+                            src={fullProfilePicUrl}
                             alt="Profile Picture"
                             className="rounded-full object-cover size-10"
+                            onError={(e) => {
+                                if (e.target.src !== defaultProfilePic) {
+                                    console.warn(
+                                        `Failed to load profile picture from ${fullProfilePicUrl}, falling back to default.`
+                                    );
+                                    e.target.onerror = null;
+                                    e.target.src = defaultProfilePic;
+                                }
+                            }}
                         />
                         {/* Hamburger Menu Section */}
                         <div ref={menuRef} className="relative ml-1">
@@ -105,7 +134,7 @@ const Header = () => {
                                     </li>
                                     <li className="hover:bg-neutral-100 transition-colors duration-200">
                                         <button
-                                            onClick={logoutUser}
+                                            onClick={handleLogout}
                                             className="dropdown-list"
                                         >
                                             <IoIosLogOut className="text-2xl" />

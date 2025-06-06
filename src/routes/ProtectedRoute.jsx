@@ -1,10 +1,15 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router";
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
+import { useAuth } from "../shared/contexts/AuthContext";
 
 const ProtectedRoute = () => {
-    const token = Cookies.get("token");
-    return token ? <Outlet /> : <Navigate to="/login" replace />;
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return <div>Loading authentication status...</div>; // Or return null, or a spinner component
+    }
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
