@@ -8,6 +8,7 @@ import Registration from "../features/auth/pages/Registration";
 import Home from "../features/home/pages/Home";
 import Blog from "../features/blog/pages/Blog";
 import Write from "../features/blog/pages/Write";
+import Profile from "../features/user/pages/Profile";
 
 const AppRoutes = () => {
     return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/blog/:id" element={<Blog />} />
                 <Route path="/write" element={<Write />} />
+                <Route path="/profile" element={<Profile />} />
             </Route>
 
             {/* 404 Fallback */}

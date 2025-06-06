@@ -104,20 +104,24 @@ const BlogCard = ({ blog }) => {
             {/* <-----<< Blog Info >>-----> */}
             <div className="flex flex-col space-y-2 w-7/10">
                 <div className="flex flex-row items-center space-x-4">
-                    <img
-                        src={getFileUrl(
-                            "profile-pictures",
-                            blog.authorProfilePictureUrl
-                        )}
-                        alt="Profile"
-                        className="rounded-full object-cover size-10"
-                        onError={(e) => {
-                            e.target.onerror = null; // Prevent infinite loop
-                            e.target.src =
-                                "/api/files/profile-pictures/default.jpg";
-                        }}
-                    />
-                    <span className="text-lg">{blog.authorUsername}</span>
+                    <Link to={`/profile`}>
+                        <img
+                            src={getFileUrl(
+                                "profile-pictures",
+                                blog.authorProfilePictureUrl
+                            )}
+                            alt="Profile"
+                            className="rounded-full object-cover size-10"
+                            onError={(e) => {
+                                e.target.onerror = null; // Prevent infinite loop
+                                e.target.src =
+                                    "/api/files/profile-pictures/default.jpg";
+                            }}
+                        />
+                    </Link>
+                    <Link to={`/profile`} className="text-lg">
+                        {blog.authorName}
+                    </Link>
                 </div>
                 <Link to={`/blog/${blog.id}`}>
                     <h2 className="font-roboto font-bold text-3xl">

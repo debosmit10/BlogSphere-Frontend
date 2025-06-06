@@ -84,20 +84,22 @@ const Header = () => {
                         <Link to={`#notification`} className="mr-4">
                             <PiNotification className="text-2xl text-neutral-500" />
                         </Link>
-                        <img
-                            src={fullProfilePicUrl}
-                            alt="Profile Picture"
-                            className="rounded-full object-cover size-10"
-                            onError={(e) => {
-                                if (e.target.src !== defaultProfilePic) {
-                                    console.warn(
-                                        `Failed to load profile picture from ${fullProfilePicUrl}, falling back to default.`
-                                    );
-                                    e.target.onerror = null;
-                                    e.target.src = defaultProfilePic;
-                                }
-                            }}
-                        />
+                        <Link to={`/profile`}>
+                            <img
+                                src={fullProfilePicUrl}
+                                alt="Profile Picture"
+                                className="rounded-full object-cover size-10"
+                                onError={(e) => {
+                                    if (e.target.src !== defaultProfilePic) {
+                                        console.warn(
+                                            `Failed to load profile picture from ${fullProfilePicUrl}, falling back to default.`
+                                        );
+                                        e.target.onerror = null;
+                                        e.target.src = defaultProfilePic;
+                                    }
+                                }}
+                            />
+                        </Link>
                         {/* Hamburger Menu Section */}
                         <div ref={menuRef} className="relative ml-1">
                             <Hamburger
@@ -112,14 +114,18 @@ const Header = () => {
                             {/* Dropdown Menu */}
                             {isMenuOpen && (
                                 <ul className="absolute top-14 right-[-16px] w-48 bg-white border-l border-b border-neutral-200 rounded-bl-xl z-20 overflow-hidden">
-                                    <li className="dropdown-list">
-                                        <PiUserCircle className="text-2xl" />
-                                        <span>Profile</span>
-                                    </li>
-                                    <li className="dropdown-list">
-                                        <PiSquareSplitVertical className="text-2xl" />
-                                        <span>Feed</span>
-                                    </li>
+                                    <Link to={`/profile`}>
+                                        <li className="dropdown-list">
+                                            <PiUserCircle className="text-2xl" />
+                                            <span>Profile</span>
+                                        </li>
+                                    </Link>
+                                    <Link to={`/home`}>
+                                        <li className="dropdown-list">
+                                            <PiSquareSplitVertical className="text-2xl" />
+                                            <span>Feed</span>
+                                        </li>
+                                    </Link>
                                     <li className="dropdown-list">
                                         <PiNote className="text-2xl" />
                                         <span>Drafts</span>
