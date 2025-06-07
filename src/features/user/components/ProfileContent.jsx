@@ -1,7 +1,7 @@
 import React from "react";
-import Feed from "../../home/components/Feed";
+import BlogCard from "../../home/components/BlogCard";
 
-const ProfileContent = () => {
+const ProfileContent = ({ blogs }) => {
     return (
         <div className="flex flex-col px-7 space-y-0">
             <img
@@ -21,7 +21,15 @@ const ProfileContent = () => {
                     Drafts
                 </button>
             </nav>
-            <Feed />
+            {blogs.length === 0 ? (
+                <p className="text-gray-600">No blogs posted yet.</p>
+            ) : (
+                <div>
+                    {blogs.map((blog) => (
+                        <BlogCard key={blog.id} blog={blog} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

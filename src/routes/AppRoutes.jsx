@@ -25,7 +25,7 @@ const AppRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/blog/:id" element={<Blog />} />
                 <Route path="/write" element={<Write />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/:userId" element={<Profile />} />
             </Route>
 
             {/* 404 Fallback */}

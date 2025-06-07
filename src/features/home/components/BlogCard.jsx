@@ -104,7 +104,7 @@ const BlogCard = ({ blog }) => {
             {/* <-----<< Blog Info >>-----> */}
             <div className="flex flex-col space-y-2 w-7/10">
                 <div className="flex flex-row items-center space-x-4">
-                    <Link to={`/profile`}>
+                    <Link to={`/profile/${blog.authorId}`}>
                         <img
                             src={getFileUrl(
                                 "profile-pictures",
@@ -119,7 +119,7 @@ const BlogCard = ({ blog }) => {
                             }}
                         />
                     </Link>
-                    <Link to={`/profile`} className="text-lg">
+                    <Link to={`/profile/${blog.authorId}`} className="text-lg">
                         {blog.authorName}
                     </Link>
                 </div>
