@@ -43,4 +43,14 @@ ApiClient.interceptors.response.use(
     }
 );
 
+export const getUserProfile = async (userId) => {
+    try {
+        const response = await ApiClient.get(`/users/${userId}/profile`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        throw error;
+    }
+};
+
 export default ApiClient;
