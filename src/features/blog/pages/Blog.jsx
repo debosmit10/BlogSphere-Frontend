@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../../../shared/components/header";
 import { Link, useParams } from "react-router";
 import { FollowButton } from "../../../shared/components/Buttons";
@@ -9,8 +9,11 @@ import {
     PiBookmarksSimpleFill,
     PiDotsThreeBold,
 } from "react-icons/pi";
-import Comment from "../components/Comment";
-import ApiClient, { getFileUrl } from "../../../shared/api/ApiClient";
+import CommentSection from "../components/CommentSection";
+import ApiClient, {
+    getFileUrl,
+    getCommentsByBlogId,
+} from "../../../shared/api/ApiClient";
 import { formatDate } from "../../../shared/utils/dateUtils";
 import {
     getLikeStatus,
@@ -30,6 +33,9 @@ const Blog = () => {
     const [isLikeLoading, setIsLikeLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isSaveLoading, setIsSaveLoading] = useState(false);
+    const [comments, setComments] = useState([]); // New state for comments
+    const [commentsLoading, setCommentsLoading] = useState(true); // New state for comments loading
+    const [commentsError, setCommentsError] = useState(null); // New state for comments error
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -71,6 +77,42 @@ const Blog = () => {
 
         if (!loading && !error && blog) {
             fetchLikeData();
+        }
+    }, [id, loading, error, blog]);
+
+    const fetchComments = async () => {
+        if (!id) {
+            console.log("fetchComments: Blog ID is not available.");
+            return;
+        }
+        setCommentsLoading(true);
+        setCommentsError(null);
+        try {
+            console.log(
+                `fetchComments: Attempting to fetch comments for blog ID: ${id}`
+            );
+            const fetchedComments = await getCommentsByBlogId(id);
+            console.log(
+                "fetchComments: Fetched comments data:",
+                fetchedComments
+            );
+            setComments(fetchedComments);
+            console.log("fetchComments: Comments state updated.");
+        } catch (err) {
+            console.error("fetchComments: Error fetching comments:", err);
+            setCommentsError(err.message);
+        } finally {
+            setCommentsLoading(false);
+            console.log("fetchComments: Comments loading finished.");
+        }
+    };
+
+    useEffect(() => {
+        if (!loading && !error && blog) {
+            console.log(
+                "Blog useEffect: Blog data loaded, initiating comment fetch."
+            );
+            fetchComments();
         }
     }, [id, loading, error, blog]);
 
@@ -139,6 +181,7 @@ const Blog = () => {
                             {blog.title}
                         </h1>
                     </div>
+                    {/* Blog Section */}
                     <section>
                         <div className="sticky top-16 py-5 space-y-3 bg-white border-b border-neutral-200">
                             <div className="flex flex-row justify-between">
@@ -218,33 +261,16 @@ const Blog = () => {
                             </p>
                         </div>
                     </section>
-                    {/*<section>
-                        <div className="sticky top-16 flex flex-col py-5 space-y-3 border-y border-neutral-200 bg-white">
-                            <span className="font-reservation font-bold text-4xl">
-                                Comments
-                            </span>
-                            <div className="flex flex-row space-x-3 items-center">
-                                <img
-                                    src="https://placehold.co/100"
-                                    alt="Profile Picture"
-                                    className="rounded-full object-cover size-10"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Write your comment here..."
-                                    className="outline-none border-b border-neutral-400 w-full text-lg bg-transparent placeholder-gray-400"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <Comment />
-                            <Comment />
-                            <Comment />
-                            <Comment />
-                            <Comment />
-                            <Comment />
-                        </div>
-                    </section>*/}
+                    {/* Comments Section */}
+                    <section>
+                        <CommentSection
+                            blogId={blog.id}
+                            comments={comments}
+                            commentsLoading={commentsLoading}
+                            commentsError={commentsError}
+                            onCommentPosted={fetchComments}
+                        />
+                    </section>
                 </div>
             </div>
         </>
