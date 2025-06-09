@@ -18,18 +18,28 @@ import {
     PiFlag,
 } from "react-icons/pi";
 import { BsChevronCompactUp, BsChevronCompactDown } from "react-icons/bs";
+import {
+    fetchDashboardStats,
+    fetchAllUsers,
+    deleteUser,
+    updateUserRole,
+} from "../api";
 
 const AdminDashboard = () => {
     // State for analytics data (dummy data for frontend)
     const [analytics, setAnalytics] = useState({
-        totalUsers: 1247,
-        totalPosts: 3892,
-        totalComments: 15673,
-        postsToday: 23,
-        postsThisWeek: 156,
-        postsThisMonth: 687,
-        postsThisYear: 3892,
+        totalUsers: 0,
+        totalPosts: 0,
+        totalComments: 0,
+        postsToday: 0,
+        postsThisWeek: 0,
+        postsThisMonth: 0,
+        postsThisYear: 0,
     });
+
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // State for category management
     const [categories, setCategories] = useState([
@@ -41,41 +51,7 @@ const AdminDashboard = () => {
     ]);
     const [newCategory, setNewCategory] = useState("");
 
-    // State for user management
-    const [users, setUsers] = useState([
-        {
-            id: 1,
-            username: "john_doe",
-            email: "john@example.com",
-            joinDate: "2024-01-15",
-            status: "active",
-            role: "user",
-            postsCount: 12,
-            commentsCount: 45,
-        },
-        {
-            id: 2,
-            username: "jane_smith",
-            email: "jane@example.com",
-            joinDate: "2024-02-20",
-            status: "active",
-            role: "admin",
-            postsCount: 28,
-            commentsCount: 89,
-        },
-        {
-            id: 3,
-            username: "mike_wilson",
-            email: "mike@example.com",
-            joinDate: "2024-03-10",
-            status: "banned",
-            role: "user",
-            postsCount: 5,
-            commentsCount: 12,
-        },
-    ]);
-
-    // State for report/reports
+    // State for report/reports (Dummy)
     const [report, setReport] = useState([
         {
             id: 1,
@@ -108,6 +84,25 @@ const AdminDashboard = () => {
     const [isreportActionOpen, setIsreportActionOpen] = useState({});
     const userActionRefs = useRef({});
     const reportActionRefs = useRef({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const stats = await fetchDashboardStats();
+                setAnalytics(stats);
+
+                const usersData = await fetchAllUsers();
+                setUsers(usersData);
+            } catch (err) {
+                console.error("Error fetching admin data:", err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     // Handle click outside for dropdowns
     useEffect(() => {
@@ -189,27 +184,29 @@ const AdminDashboard = () => {
     };
 
     // User management functions
-    const handleUserAction = (userId, action) => {
-        setUsers(
-            users.map((user) => {
-                if (user.id === userId) {
-                    switch (action) {
-                        case "ban":
-                            return { ...user, status: "banned" };
-                        case "unban":
-                            return { ...user, status: "active" };
-                        case "makeAdmin":
-                            return { ...user, role: "admin" };
-                        case "removeAdmin":
-                            return { ...user, role: "user" };
-                        default:
-                            return user;
-                    }
-                }
-                return user;
-            })
-        );
-        setIsUserActionOpen((prev) => ({ ...prev, [userId]: false }));
+    const handleDeleteUser = async (userId) => {
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            try {
+                await deleteUser(userId);
+                setUsers(users.filter((user) => user.id !== userId));
+            } catch (err) {
+                console.error("Error deleting user:", err);
+                alert("Failed to delete user.");
+            }
+        }
+    };
+
+    const handleUpdateUserRole = async (userId, newRole) => {
+        try {
+            const updatedUser = await updateUserRole(userId, newRole);
+            setUsers(
+                users.map((user) => (user.id === userId ? updatedUser : user))
+            );
+            setIsUserActionOpen((prev) => ({ ...prev, [userId]: false }));
+        } catch (err) {
+            console.error("Error updating user role:", err);
+            alert("Failed to update user role.");
+        }
     };
 
     // report management functions
@@ -227,6 +224,30 @@ const AdminDashboard = () => {
             [reportId]: false,
         }));
     };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <div className="text-red-500 text-xl">
+                    Error: {error.message}
+                </div>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Reload Page
+                </button>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -419,15 +440,15 @@ const AdminDashboard = () => {
                                         <th className="text-left py-3 px-4 font-medium text-gray-900">
                                             Email
                                         </th>
-                                        <th className="text-left py-3 px-4 font-medium text-gray-900">
+                                        {/* <th className="text-left py-3 px-4 font-medium text-gray-900">
                                             Join Date
-                                        </th>
-                                        <th className="text-left py-3 px-4 font-medium text-gray-900">
+                                        </th> */}
+                                        {/* <th className="text-left py-3 px-4 font-medium text-gray-900">
                                             Posts
-                                        </th>
-                                        <th className="text-left py-3 px-4 font-medium text-gray-900">
+                                        </th> */}
+                                        {/* <th className="text-left py-3 px-4 font-medium text-gray-900">
                                             Comments
-                                        </th>
+                                        </th> */}
                                         {/* <th className="text-left py-3 px-4 font-medium text-gray-900">
                                             Status
                                         </th> */}
@@ -451,15 +472,15 @@ const AdminDashboard = () => {
                                             <td className="py-3 px-4 text-gray-600">
                                                 {user.email}
                                             </td>
-                                            <td className="py-3 px-4 text-gray-600">
+                                            {/* <td className="py-3 px-4 text-gray-600">
                                                 {user.joinDate}
-                                            </td>
-                                            <td className="py-3 px-4 text-gray-600">
+                                            </td> */}
+                                            {/* <td className="py-3 px-4 text-gray-600">
                                                 {user.postsCount}
-                                            </td>
-                                            <td className="py-3 px-4 text-gray-600">
+                                            </td> */}
+                                            {/* <td className="py-3 px-4 text-gray-600">
                                                 {user.commentsCount}
-                                            </td>
+                                            </td> */}
                                             {/* <td className="py-3 px-4">
                                                 <span
                                                     className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -474,23 +495,19 @@ const AdminDashboard = () => {
                                             <td className="py-3 px-4">
                                                 <span
                                                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                        user.role === "admin"
+                                                        user.role ===
+                                                        "ROLE_ADMIN"
                                                             ? "bg-purple-100 text-purple-800"
                                                             : "bg-gray-100 text-gray-800"
                                                     }`}
                                                 >
-                                                    {user.role}
+                                                    {user.role === "ROLE_ADMIN"
+                                                        ? "Admin"
+                                                        : "User"}
                                                 </span>
                                             </td>
-                                            <td className="py-3 px-4">
-                                                <div
-                                                    className="relative"
-                                                    ref={(el) =>
-                                                        (userActionRefs.current[
-                                                            user.id
-                                                        ] = el)
-                                                    }
-                                                >
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="relative inline-block text-left">
                                                     <button
                                                         onClick={() =>
                                                             setIsUserActionOpen(
@@ -504,74 +521,71 @@ const AdminDashboard = () => {
                                                                 })
                                                             )
                                                         }
-                                                        className="text-gray-600 hover:text-gray-900 transition-colors"
+                                                        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                     >
-                                                        <PiArrowCircleRightLight className="text-xl" />
+                                                        Actions
+                                                        {isUserActionOpen[
+                                                            user.id
+                                                        ] ? (
+                                                            <BsChevronCompactUp className="-mr-1 ml-2 h-5 w-5" />
+                                                        ) : (
+                                                            <BsChevronCompactDown className="-mr-1 ml-2 h-5 w-5" />
+                                                        )}
                                                     </button>
-
                                                     {isUserActionOpen[
                                                         user.id
                                                     ] && (
-                                                        <div className="absolute right-0 top-8 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                                                            <BsChevronCompactUp className="absolute -top-2 right-4 text-gray-200" />
-
-                                                            {user.status ===
-                                                            "active" ? (
+                                                        <div
+                                                            ref={(el) =>
+                                                                (userActionRefs.current[
+                                                                    user.id
+                                                                ] = el)
+                                                            }
+                                                            className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                                                        >
+                                                            <div className="py-1">
                                                                 <button
                                                                     onClick={() =>
-                                                                        handleUserAction(
-                                                                            user.id,
-                                                                            "ban"
+                                                                        handleDeleteUser(
+                                                                            user.id
                                                                         )
                                                                     }
-                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-red-600"
+                                                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                                                                 >
-                                                                    <PiUser />{" "}
-                                                                    Ban User
+                                                                    <PiTrash className="mr-2" />
+                                                                    Delete User
                                                                 </button>
-                                                            ) : (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleUserAction(
-                                                                            user.id,
-                                                                            "unban"
-                                                                        )
-                                                                    }
-                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-green-600"
-                                                                >
-                                                                    <PiUserCheck />{" "}
-                                                                    Unban User
-                                                                </button>
-                                                            )}
-
-                                                            {user.role ===
-                                                            "user" ? (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleUserAction(
-                                                                            user.id,
-                                                                            "makeAdmin"
-                                                                        )
-                                                                    }
-                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-purple-600"
-                                                                >
-                                                                    <PiCrown />{" "}
-                                                                    Make Admin
-                                                                </button>
-                                                            ) : (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleUserAction(
-                                                                            user.id,
-                                                                            "removeAdmin"
-                                                                        )
-                                                                    }
-                                                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-gray-600"
-                                                                >
-                                                                    <PiUserCheck />{" "}
-                                                                    Remove Admin
-                                                                </button>
-                                                            )}
+                                                                {user.role ===
+                                                                "ROLE_USER" ? (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleUpdateUserRole(
+                                                                                user.id,
+                                                                                "ROLE_ADMIN"
+                                                                            )
+                                                                        }
+                                                                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                                    >
+                                                                        <PiCrown className="mr-2" />
+                                                                        Make
+                                                                        Admin
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleUpdateUserRole(
+                                                                                user.id,
+                                                                                "ROLE_ADMINUSER"
+                                                                            )
+                                                                        }
+                                                                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                                    >
+                                                                        <PiUser className="mr-2" />
+                                                                        Remove
+                                                                        Admin
+                                                                    </button>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
