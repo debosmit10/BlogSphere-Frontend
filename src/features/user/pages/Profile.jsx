@@ -5,6 +5,12 @@ import ProfileInfo from "../components/ProfileInfo";
 import { useParams, useNavigate } from "react-router";
 import { useAuth } from "../../../shared/contexts/AuthContext";
 import ApiClient from "../../../shared/api/ApiClient";
+import {
+    toggleFollow,
+    getFollowStatus,
+    getFollowerCount,
+    getFollowingCount,
+} from "../api";
 
 const Profile = () => {
     const { userId } = useParams();
@@ -14,6 +20,9 @@ const Profile = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followerCount, setFollowerCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -35,6 +44,18 @@ const Profile = () => {
                     `/blogs/user/${targetUserId}`
                 );
                 setBlogs(blogsResponse.data);
+
+                if (currentUser && currentUser.id !== targetUserId) {
+                    const status = await getFollowStatus(
+                        currentUser.id,
+                        targetUserId
+                    );
+                    setIsFollowing(status);
+                }
+                const followers = await getFollowerCount(targetUserId);
+                setFollowerCount(followers);
+                const following = await getFollowingCount(targetUserId);
+                setFollowingCount(following);
             } catch (err) {
                 console.error("Error fetching profile data:", err);
                 setError(err);
@@ -45,6 +66,23 @@ const Profile = () => {
 
         fetchUserProfile();
     }, [userId, currentUser]);
+
+    const handleToggleFollow = async () => {
+        if (!currentUser) {
+            navigate("/login"); // Redirect to login if not authenticated
+            return;
+        }
+        try {
+            const newStatus = await toggleFollow(currentUser.id, user.id);
+            setIsFollowing(newStatus);
+            setFollowerCount((prevCount) =>
+                newStatus ? prevCount + 1 : prevCount - 1
+            );
+        } catch (err) {
+            console.error("Error toggling follow:", err);
+            // Optionally show an error message to the user
+        }
+    };
 
     if (loading) {
         return (
@@ -79,7 +117,18 @@ const Profile = () => {
                     {blogs && <ProfileContent blogs={blogs} />}
                 </div>
                 <div className="Right-Bar h-screen w-3/10 border-l border-neutral-200">
-                    {user && <ProfileInfo user={user} />}
+                    {user && (
+                        <ProfileInfo
+                            user={user}
+                            followerCount={followerCount}
+                            followingCount={followingCount}
+                            isFollowing={isFollowing}
+                            onToggleFollow={handleToggleFollow}
+                            showFollowButton={
+                                currentUser && currentUser.id !== user.id
+                            }
+                        />
+                    )}
                 </div>
             </div>
         </>

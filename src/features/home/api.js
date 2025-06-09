@@ -30,3 +30,13 @@ export const createBlog = async (blogData) => {
         throw error;
     }
 };
+
+export const fetchBlogsFromFollowedUsers = async () => {
+    try {
+        const response = await ApiClient.get("/blogs/following");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching blogs from followed users:", error);
+        throw error;
+    }
+};
