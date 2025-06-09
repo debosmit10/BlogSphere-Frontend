@@ -1,15 +1,27 @@
 import React from "react";
+import { getFileUrl } from "../../../shared/api/ApiClient";
+import { Link } from "react-router";
 
-const ContinueReadingCard = () => {
+const ContinueReadingCard = ({ blog }) => {
     return (
-        <div className="px-3 py-2 flex flex-row items-center space-x-3 rounded-2xl hover:bg-gray-100 duration-200">
+        <Link
+            to={`/blog/${blog.id}`}
+            className="px-3 py-2 flex flex-row items-center space-x-3 rounded-2xl hover:bg-gray-100 duration-200"
+        >
             <img
-                src="https://placehold.co/100"
+                src={getFileUrl(
+                    "profile-pictures",
+                    blog.authorProfilePictureUrl
+                )}
                 alt="Profile Picture"
                 className="rounded-full object-cover size-8"
+                onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = "/api/files/profile-pictures/default.jpg";
+                }}
             />
-            <h3 className="font-roboto">Lorem ipsum dolor sit amet consecte</h3>
-        </div>
+            <h3 className="font-roboto line-clamp-1">{blog.title}</h3>
+        </Link>
     );
 };
 
