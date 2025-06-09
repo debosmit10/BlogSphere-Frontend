@@ -50,3 +50,13 @@ export const fetchTopLikedBlogsOfWeek = async () => {
         throw error;
     }
 };
+
+export const fetchRecentlyVisitedBlogs = async () => {
+    try {
+        const response = await ApiClient.get("/blogs/recently-visited");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching recently visited blogs:", error);
+        throw error;
+    }
+};

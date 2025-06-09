@@ -24,13 +24,9 @@ const TopPickCard = ({ blog }) => {
                             alt="Profile Picture"
                             className="rounded-full object-cover size-8"
                             onError={(e) => {
-                                if (e.target.src !== defaultProfilePic) {
-                                    console.warn(
-                                        `Failed to load profile picture from ${fullProfilePicUrl}, falling back to default.`
-                                    );
-                                    e.target.onerror = null;
-                                    e.target.src = defaultProfilePic;
-                                }
+                                e.target.onerror = null; // Prevent infinite loop
+                                e.target.src =
+                                    "/api/files/profile-pictures/default.jpg";
                             }}
                         />
                     </Link>
