@@ -9,6 +9,7 @@ import Home from "../features/home/pages/Home";
 import Blog from "../features/blog/pages/Blog";
 import Write from "../features/blog/pages/Write";
 import Profile from "../features/user/pages/Profile";
+import AdminDashboard from "../features/admin/pages/AdminDashboard";
 
 const AppRoutes = () => {
     return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>

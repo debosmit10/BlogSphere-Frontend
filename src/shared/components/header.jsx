@@ -9,6 +9,7 @@ import {
     PiNote,
     PiBookmarksSimple,
     PiGearSix,
+    PiGauge,
 } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
 import Hamburger from "hamburger-react";
@@ -134,6 +135,14 @@ const Header = () => {
                                         <PiBookmarksSimple className="text-2xl" />
                                         <span>Saved</span>
                                     </li>
+                                    {user && user.role === "ROLE_ADMIN" && (
+                                        <Link to={`/admin/dashboard`}>
+                                            <li className="dropdown-list">
+                                                <PiGauge className="text-2xl" />
+                                                <span>Dashboard</span>
+                                            </li>
+                                        </Link>
+                                    )}
                                     <li className="dropdown-list">
                                         <PiGearSix className="text-2xl" />
                                         <span>Settings</span>
