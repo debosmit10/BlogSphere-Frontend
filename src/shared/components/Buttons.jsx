@@ -11,8 +11,15 @@ export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
     </button>
 );
 
-export const FollowButton = () => (
-    <button className="px-2 py-0.5 w-fit rounded-full border hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer">
-        <span>Follow</span>
+export const FollowButton = ({ isFollowing, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`px-2 py-0.5 w-fit rounded-full border ${
+            isFollowing
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+        } transition-colors duration-200 cursor-pointer`}
+    >
+        <span>{isFollowing ? "Following" : "Follow"}</span>
     </button>
 );
