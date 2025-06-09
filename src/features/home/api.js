@@ -40,3 +40,13 @@ export const fetchBlogsFromFollowedUsers = async () => {
         throw error;
     }
 };
+
+export const fetchTopLikedBlogsOfWeek = async () => {
+    try {
+        const response = await ApiClient.get("/blogs/top-liked-weekly");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching top liked blogs of the week:", error);
+        throw error;
+    }
+};
