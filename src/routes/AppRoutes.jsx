@@ -8,6 +8,7 @@ import Registration from "../features/auth/pages/Registration";
 import Home from "../features/home/pages/Home";
 import Blog from "../features/blog/pages/Blog";
 import Write from "../features/blog/pages/Write";
+import Edit from "../features/blog/pages/Edit";
 import Profile from "../features/user/pages/Profile";
 import AdminDashboard from "../features/admin/pages/AdminDashboard";
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/blog/:id" element={<Blog />} />
                 <Route path="/write" element={<Write />} />
+                <Route path="/edit" element={<Edit />} />
                 <Route path="/profile/:userId" element={<Profile />} />
             </Route>
 

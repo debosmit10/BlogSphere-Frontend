@@ -9,9 +9,9 @@ import {
 } from "react-icons/fa";
 const Contact = () => {
     return (
-        <div className="font-syne min-h-screen bg-white text-gray-900">
+        <div className="font-syne min-h-screen text-gray-900">
             {/* Hero Section */}
-            <header className="py-20 px-4 sm:px-6 lg:px-8">
+            <header className="py-20 px-4 sm:px-6 lg:px-8 bg-black text-white">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="font-reservation font-bold text-4xl md:text-6xl mb-4">
                         Get in Touch
@@ -104,7 +104,7 @@ const Contact = () => {
 
                             <button
                                 type="submit"
-                                className="w-full bg-black text-white py-3 px-6 rounded font-bold hover:bg-gray-800 transition-colors"
+                                className="w-full bg-black text-white py-3 px-6 rounded-full font-bold hover:bg-gray-800 transition-colors"
                             >
                                 Send Message
                             </button>
@@ -166,11 +166,9 @@ const Contact = () => {
                                     <h3 className="text-xl font-bold mb-1">
                                         Office
                                     </h3>
+                                    <p className="text-gray-700">Kolkata</p>
                                     <p className="text-gray-700">
-                                        1234 Blog Lane
-                                    </p>
-                                    <p className="text-gray-700">
-                                        Brooklyn, NY 11201
+                                        West Bengal, IN
                                     </p>
                                 </div>
                             </div>
@@ -216,7 +214,7 @@ const Contact = () => {
                                     placeholder="Your email address"
                                     className="flex-grow px-4 py-3 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                                 />
-                                <button className="bg-black text-white px-6 py-3 rounded-r font-bold hover:bg-gray-800 transition-colors">
+                                <button className="bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition-colors">
                                     Subscribe
                                 </button>
                             </div>

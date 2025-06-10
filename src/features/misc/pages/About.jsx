@@ -41,16 +41,18 @@ const About = () => {
                                 thousands who appreciate substance over style.
                             </p>
                         </div>
-                        <div className="bg-gray-100 h-70 md:h-80 flex items-center justify-center">
-                            <span className="text-gray-500 text-lg">
-                                Founding team photo or illustration
-                            </span>
+                        <div className="h-70 md:h-80 flex items-center justify-center">
+                            <img
+                                src="src/shared/assets/images/team-image.jpg"
+                                alt="Team Picture"
+                                className="rounded-xl"
+                            />
                         </div>
                     </div>
                 </section>
 
                 {/* Our Philosophy */}
-                <section className="mb-10 bg-black text-white p-12">
+                <section className="mb-10 bg-black text-white p-12 rounded-xl">
                     <h2 className="font-reservation text-3xl font-bold mb-8 text-center">
                         Our Philosophy
                     </h2>
@@ -132,6 +134,7 @@ const About = () => {
                     <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
                         {[
                             {
+                                image: "Somik",
                                 name: "Somik Acharjee",
                                 role: "Founder & Frontend Developer",
                                 bio: "Crafts pixel-perfect, user-friendly interfaces.",
@@ -161,11 +164,13 @@ const About = () => {
                                 key={index}
                                 className="border border-gray-200 p-6 rounded-lg hover:shadow-lg transition-shadow"
                             >
-                                <div className="w-24 h-24 rounded-full bg-gray-200 mb-4 mx-auto flex items-center justify-center text-gray-500">
-                                    {member.name
-                                        .split(" ")
-                                        .map((n) => n[0])
-                                        .join("")}
+                                <div className="w-24 h-24 rounded-full bg-gray-200 mb-4 mx-auto flex items-center justify-center text-gray-500 overflow-hidden">
+                                    <img
+                                        src={`src/shared/assets/images/${
+                                            member.name.split(" ")[0]
+                                        }.jpg`}
+                                        alt="Member Picture"
+                                    />
                                 </div>
                                 <h3 className="text-xl font-bold text-center mb-1">
                                     {member.name}
@@ -182,7 +187,7 @@ const About = () => {
                 </section>
 
                 {/* CTA */}
-                <section className="bg-black text-white p-12 rounded-lg">
+                <section className="bg-black text-white p-12 rounded-xl">
                     <div className="max-w-3xl mx-auto text-center">
                         <h2 className="font-reservation text-3xl font-bold mb-6">
                             Ready to Join Our Community?
