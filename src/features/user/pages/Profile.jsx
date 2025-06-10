@@ -120,6 +120,7 @@ const Profile = () => {
                     {user && (
                         <ProfileInfo
                             user={user}
+                            blogCount={blogs.length}
                             followerCount={followerCount}
                             followingCount={followingCount}
                             isFollowing={isFollowing}

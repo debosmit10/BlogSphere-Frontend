@@ -1,9 +1,11 @@
 import React from "react";
 import { FollowButton } from "../../../shared/components/Buttons";
 import { getFileUrl } from "../../../shared/api/ApiClient";
+import { PiShieldCheck } from "react-icons/pi";
 
 const ProfileInfo = ({
     user,
+    blogCount,
     followerCount,
     followingCount,
     isFollowing,
@@ -18,11 +20,16 @@ const ProfileInfo = ({
                     "https://via.placeholder.com/150"
                 }
                 alt="Profile Picture"
-                className="rounded-full object-cover size-40"
+                className="rounded-full aspect-square object-cover size-40"
             />
-            <h1 className="font-reservation font-black text-2xl">
-                {user.name}
-            </h1>
+            <div className="flex flex-row items-center space-x-2">
+                <h1 className="font-reservation font-black text-2xl">
+                    {user.name}
+                </h1>
+                {user && user.role === "ROLE_ADMIN" && (
+                    <PiShieldCheck className="text-2xl" />
+                )}
+            </div>
             <span className="text-neutral-600">@{user.username}</span>
             {showFollowButton && (
                 <FollowButton
@@ -32,7 +39,7 @@ const ProfileInfo = ({
             )}
             <ul className="flex flex-row space-x-7">
                 <li className="flex flex-col items-center">
-                    <span className="text-2xl font-bold">10</span>
+                    <span className="text-2xl font-bold">{blogCount}</span>
                     <span className="text-sm text-neutral-600">Posts</span>
                 </li>
                 <li className="flex flex-col items-center">

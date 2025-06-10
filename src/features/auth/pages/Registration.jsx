@@ -20,7 +20,7 @@ const Registration = () => {
 
     return (
         <div className="Container font-syne flex flex-col items-center justify-center h-dvh">
-            <div className="flex flex-row size-fit w-full max-w-4xl shadow-[0_0_30px_rgba(0,0,0,0.2)] rounded-2xl overflow-hidden">
+            <div className="flex flex-row size-fit w-full max-w-4xl rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.12)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] transition-shadow">
                 <Formik
                     initialValues={{
                         name: "",

@@ -41,14 +41,17 @@ const CommentSection = ({
     if (commentsError)
         return <div className="p-4 text-red-500">Error: {commentsError}</div>;
 
-    console.log("Comments type:", typeof comments, comments);
-
     return (
         <>
             <div className="sticky top-16 flex flex-col py-5 space-y-3 border-y border-neutral-200 bg-white">
-                <span className="font-reservation font-bold text-4xl">
-                    Comments
-                </span>
+                <div className="flex flex-row gap-2 items-center">
+                    <span className="font-reservation font-bold text-4xl">
+                        Comments
+                    </span>
+                    <span className="font-reservation text-xl">
+                        ({comments.length})
+                    </span>
+                </div>
                 <Formik
                     initialValues={{ commentContent: "" }}
                     validationSchema={CommentSchema}

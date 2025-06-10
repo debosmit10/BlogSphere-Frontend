@@ -7,6 +7,7 @@ import {
     PiBookmarksSimple,
     PiBookmarksSimpleFill,
     PiDotsThreeBold,
+    PiShieldCheck,
 } from "react-icons/pi";
 import { Link } from "react-router";
 import { getFileUrl } from "../../../shared/api/ApiClient";
@@ -103,7 +104,7 @@ const BlogCard = ({ blog }) => {
         <div className="py-5 flex flex-row items-center border-b border-neutral-200 space-x-5">
             {/* <-----<< Blog Info >>-----> */}
             <div className="flex flex-col space-y-2 w-7/10">
-                <div className="flex flex-row items-center space-x-4">
+                <div className="flex flex-row items-center space-x-3">
                     <Link to={`/profile/${blog.authorId}`}>
                         <img
                             src={getFileUrl(
@@ -111,7 +112,7 @@ const BlogCard = ({ blog }) => {
                                 blog.authorProfilePictureUrl
                             )}
                             alt="Profile"
-                            className="rounded-full object-cover size-10"
+                            className="rounded-full aspect-square object-cover size-10"
                             onError={(e) => {
                                 e.target.onerror = null; // Prevent infinite loop
                                 e.target.src =
@@ -122,12 +123,15 @@ const BlogCard = ({ blog }) => {
                     <Link to={`/profile/${blog.authorId}`} className="text-lg">
                         {blog.authorName}
                     </Link>
+                    {blog.authorRole && blog.authorRole === "ROLE_ADMIN" && (
+                        <PiShieldCheck className="text-lg" />
+                    )}
                 </div>
                 <Link to={`/blog/${blog.id}`}>
-                    <h2 className="font-roboto font-bold text-3xl">
+                    <h2 className="font-roboto font-bold text-3xl line-clamp-1">
                         {blog.title || "Untitled Blog"}
                     </h2>
-                    <p className="font-roboto">
+                    <p className="font-roboto line-clamp-2">
                         {blog.content || "No content available"}
                     </p>
                 </Link>
@@ -154,8 +158,10 @@ const BlogCard = ({ blog }) => {
                             </span>
                         </div>
                         <button className="flex flex-row space-x-2">
-                            <PiChats className="text-2xl" />
-                            <span>0</span>
+                            <Link to={`/blog/${blog.id}`}>
+                                <PiChats className="text-2xl hover:text-blue-600 transition-colors duration-200 ease-in-out" />
+                            </Link>
+                            <span>{blog.commentCount}</span>
                         </button>
                     </div>
                     <div className="flex flex-row items-center space-x-4">
@@ -168,11 +174,11 @@ const BlogCard = ({ blog }) => {
                             {isSaved ? (
                                 <PiBookmarksSimpleFill className="text-2xl text-blue-600" />
                             ) : (
-                                <PiBookmarksSimple className="text-2xl hover:text-blue-600" />
+                                <PiBookmarksSimple className="text-2xl hover:text-blue-600 transition-colors duration-200" />
                             )}
                         </button>
                         <button>
-                            <PiDotsThreeBold className="text-2xl" />
+                            <PiDotsThreeBold className="text-2xl rounded-sm hover:bg-neutral-200 transition-colors duration-200 ease-in-out" />
                         </button>
                     </div>
                 </div>
@@ -183,7 +189,7 @@ const BlogCard = ({ blog }) => {
                 <img
                     src={getFileUrl("blog-images", blog.imageUrl)}
                     alt="Blog cover"
-                    className="w-3/10 rounded-xl"
+                    className="w-3/10 rounded-xl aspect-16/9 object-cover"
                     loading="lazy"
                 />
             )}

@@ -10,10 +10,10 @@ const TopPickCard = ({ blog }) => {
                 <img
                     src={getFileUrl("blog-images", blog.imageUrl)}
                     alt="Blog Cover"
-                    className="h-20 rounded-xl"
+                    className="h-20 aspect-16/9 object-cover rounded-xl"
                 />
             </Link>
-            <div className="flex flex-col justify-center space-y-1">
+            <div className="flex flex-col justify-center space-y-2">
                 <div className="flex flex-row space-x-3 items-center">
                     <Link to={`/profile/${blog.authorId}`}>
                         <img
@@ -32,13 +32,16 @@ const TopPickCard = ({ blog }) => {
                     </Link>
                     <Link
                         to={`/profile/${blog.authorId}`}
-                        className="font-semibold"
+                        className="font-semibold line-clamp-1"
                     >
-                        {blog.authorName}
+                        {blog.authorUsername}
                     </Link>
                     <span>{formatDate(blog.createdAt)}</span>
                 </div>
-                <Link to={`/blog/${blog.id}`} className="font-roboto">
+                <Link
+                    to={`/blog/${blog.id}`}
+                    className="font-roboto line-clamp-1"
+                >
                     {blog.title || "Untitled Blog"}
                 </Link>
             </div>

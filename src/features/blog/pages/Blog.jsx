@@ -8,6 +8,7 @@ import {
     PiBookmarksSimple,
     PiBookmarksSimpleFill,
     PiDotsThreeBold,
+    PiShieldCheck,
 } from "react-icons/pi";
 import CommentSection from "../components/CommentSection";
 import ApiClient, {
@@ -22,6 +23,7 @@ import {
     getSavedStatus,
     toggleSavedStatus,
 } from "../../blog/api";
+import { useAuth } from "../../../shared/contexts/AuthContext";
 
 const Blog = () => {
     const { id } = useParams();
@@ -154,7 +156,13 @@ const Blog = () => {
         }
     };
 
-    if (loading) return <div className="p-4">Loading blog...</div>;
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
     if (!blog) return <div className="p-4">Blog not found</div>;
 
@@ -168,15 +176,12 @@ const Blog = () => {
                             <img
                                 src={getFileUrl("blog-images", blog.imageUrl)}
                                 alt="Blog Cover"
-                                className="mb-4 rounded-xl w-full h-auto max-h-96 object-cover"
+                                className="mb-4 rounded-xl w-full h-auto max-h-96 aspect-16/9 object-cover"
                             />
                         )}
-                        <Link
-                            to={`/home/topic/${blog.topic}`}
-                            className="mb-2 font-medium text-neutral-600 hover:underline"
-                        >
+                        <div className="mb-2 font-medium text-neutral-600">
                             #{blog.topicDisplayName}
-                        </Link>
+                        </div>
                         <h1 className="font-reservation font-bold text-4xl ">
                             {blog.title}
                         </h1>
@@ -186,7 +191,7 @@ const Blog = () => {
                         <div className="sticky top-16 py-5 space-y-3 bg-white border-b border-neutral-200">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-row items-center space-x-3">
-                                    <Link to={`/user/${blog.authorUsername}`}>
+                                    <Link to={`/profile/${blog.authorId}`}>
                                         <img
                                             src={getFileUrl(
                                                 "profile-pictures",
@@ -201,10 +206,17 @@ const Blog = () => {
                                             }}
                                         />
                                     </Link>
-                                    <Link to={`/user/${blog.authorUsername}`}>
+                                    <Link
+                                        to={`/profile/${blog.authorId}`}
+                                        className="text-lg"
+                                    >
                                         {blog.authorUsername}
                                     </Link>
-                                    <FollowButton />
+                                    {blog.authorRole &&
+                                        blog.authorRole === "ROLE_ADMIN" && (
+                                            <PiShieldCheck className="text-lg" />
+                                        )}
+                                    {/* <FollowButton /> */}
                                 </div>
                                 <div className="flex flex-row space-x-3 items-center">
                                     <span>{formatDate(blog.createdAt)}</span>
@@ -246,11 +258,11 @@ const Blog = () => {
                                         {isSaved ? (
                                             <PiBookmarksSimpleFill className="text-2xl text-blue-600" />
                                         ) : (
-                                            <PiBookmarksSimple className="text-2xl hover:text-blue-600" />
+                                            <PiBookmarksSimple className="text-2xl hover:text-blue-600 transition-colors duration-200" />
                                         )}
                                     </button>
                                     <button>
-                                        <PiDotsThreeBold className="text-2xl" />
+                                        <PiDotsThreeBold className="text-2xl rounded-sm hover:bg-neutral-200 transition-colors duration-200 ease-in-out" />
                                     </button>
                                 </div>
                             </div>

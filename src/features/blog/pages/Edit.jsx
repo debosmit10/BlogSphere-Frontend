@@ -21,7 +21,7 @@ const Edit = () => {
                     <img
                         src="https://wallpapercave.com/wp/wp12025786.jpg"
                         alt="Blog Cover"
-                        className="object-cover w-full h-full rounded-xl"
+                        className="aspect-16/9 object-cover w-full h-full rounded-xl"
                     />
                     <span className="mb-2 font-medium text-neutral-600 hover:underline">
                         #Life

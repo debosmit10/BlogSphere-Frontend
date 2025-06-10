@@ -5,30 +5,8 @@ import CategoryManagement from "../components/CategoryManagement";
 import SiteManagement from "../components/SiteManagement";
 import UserManagement from "../components/UserManagement";
 import ReportManagement from "../components/ReportManagement";
-import {
-    PiUsers,
-    PiArticle,
-    PiChatCircle,
-    PiCalendar,
-    PiPlus,
-    PiTrash,
-    PiUserCheck,
-    PiCrown,
-    PiUser,
-    PiWarning,
-    PiToggleLeft,
-    PiToggleRight,
-    PiArrowCircleRightLight,
-    PiBell,
-    PiFlag,
-} from "react-icons/pi";
-import { BsChevronCompactUp, BsChevronCompactDown } from "react-icons/bs";
-import {
-    fetchDashboardStats,
-    fetchAllUsers,
-    deleteUser,
-    updateUserRole,
-} from "../api";
+import { PiUsers, PiArticle, PiChatCircle, PiCalendar } from "react-icons/pi";
+import { fetchDashboardStats, fetchAllUsers } from "../api";
 
 const AdminDashboard = () => {
     // State for analytics data (dummy data for frontend)

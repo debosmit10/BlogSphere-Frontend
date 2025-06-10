@@ -105,7 +105,7 @@ const Write = () => {
                                             <img
                                                 src={coverImage}
                                                 alt="Cover preview"
-                                                className="object-cover w-full h-full rounded-xl"
+                                                className="aspect-16/9 object-cover w-full h-full rounded-xl"
                                             />
                                         ) : (
                                             <div className="flex flex-col items-center text-gray-500 group-hover:text-black">
