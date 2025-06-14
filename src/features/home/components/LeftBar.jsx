@@ -40,9 +40,9 @@ const LeftBar = ({ activeView, setActiveView }) => {
                         <span className="text-xl ">Write</span>
                     </Link>
                 </li>
-                <li>
+                {/* <li>
                     <LeftbarButton icon={PiNote} label="Drafts" />
-                </li>
+                </li> */}
                 <li>
                     <LeftbarButton
                         icon={PiBookmarksSimple}

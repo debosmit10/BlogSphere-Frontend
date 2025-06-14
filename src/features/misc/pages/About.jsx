@@ -10,7 +10,7 @@ const About = () => {
                         BlogSphere
                     </h1>
                     <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-                        Where Thoughts Converge and Stories Unfold in Monochrome
+                        Where Thoughts Converge and Stories Unfold
                     </p>
                 </div>
             </header>

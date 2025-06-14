@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import LoginSchema from "../schema/LoginSchema";
 import { Link, useNavigate } from "react-router";
@@ -7,7 +7,15 @@ import { useAuth } from "../../../shared/contexts/AuthContext"; // Import useAut
 
 const Login = () => {
     const navigate = useNavigate();
-    const { login } = useAuth(); // Get login function from context
+    const { login, isAuthenticated } = useAuth();
+
+    // useEffect to handle navigation after isAuthenticated changes
+    useEffect(() => {
+        if (isAuthenticated) {
+            console.log("isAuthenticated is true, navigating to /home");
+            navigate("/home");
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (
         values,
@@ -15,8 +23,6 @@ const Login = () => {
     ) => {
         try {
             console.log("Login attempt with:", values);
-            // **API returns a FLAT object like:**
-            // { token: "...", userId: 1, username: "user1", profilePictureUrl: "url_or_null", name: "User Name", email: "...", role: "..." }
             const response = await loginUser(values);
             console.log("Login API response:", response);
 
@@ -42,10 +48,6 @@ const Login = () => {
 
             // Call the login function from AuthContext with token and the constructed userData object
             login(token, userData);
-
-            console.log("Login successful, navigating to /home");
-            // Redirect to home after successful login
-            navigate("/home");
         } catch (error) {
             // Handle login errors (e.g., invalid credentials)
             console.error("Login failed:", error);
@@ -60,7 +62,7 @@ const Login = () => {
 
     return (
         <div className="Container font-syne flex flex-col items-center justify-center h-dvh">
-            <div className="flex flex-row size-fit w-full max-w-4xl shadow-[0_0_30px_rgba(0,0,0,0.2)] rounded-2xl overflow-hidden">
+            <div className="flex flex-row size-fit w-full max-w-4xl rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.12)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] transition-shadow">
                 <Formik
                     initialValues={{
                         username: "",

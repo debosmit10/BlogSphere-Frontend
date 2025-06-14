@@ -62,10 +62,6 @@ const CommentCard = ({ comment }) => {
                             "profile-pictures",
                             comment.userProfilePictureUrl
                         )}
-                        // {getFileUrl(
-                        //                                 "profile-pictures",
-                        //                                 blog.authorProfilePictureUrl
-                        //                             )}
                         alt="Profile Picture"
                         className="rounded-full object-cover size-10"
                         onError={(e) => {
