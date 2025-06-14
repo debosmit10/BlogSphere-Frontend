@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { PiStarFour, PiStarFourFill } from "react-icons/pi";
 
 // Home Leftbar Button
 export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
@@ -23,3 +24,18 @@ export const FollowButton = ({ isFollowing, onClick }) => (
         <span>{isFollowing ? "Following" : "Follow"}</span>
     </button>
 );
+
+export const AIButton = () => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <button
+            className="flex flex-row items-center justify-cente space-x-2 px-4 py-2 font-medium border border-purple-500 rounded-full hover:bg-purple-500 hover:text-white transition-colors duration-200"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <span>Enhance</span>
+            {isHovered ? <PiStarFourFill /> : <PiStarFour />}
+        </button>
+    );
+};

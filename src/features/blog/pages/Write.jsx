@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Header from "../../../shared/components/header";
-import { PiPlusBold, PiArrowCircleRightLight } from "react-icons/pi";
+import {
+    PiPlusBold,
+    PiArrowCircleRightLight,
+    PiStarFour,
+} from "react-icons/pi";
 import { BsChevronCompactUp, BsChevronCompactDown } from "react-icons/bs";
+import { AIButton } from "../../../shared/components/Buttons";
 import ApiClient from "../../../shared/api/ApiClient";
 
 const Write = () => {
@@ -233,11 +238,12 @@ const Write = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <div className="text-right">
+                                <div className="flex flex-row justify-between text-right">
+                                    <AIButton />
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="px-6 py-2 font-medium border rounded-full hover:bg-black hover:text-white transition-colors duration-200"
+                                        className="px-4 py-2 font-medium border rounded-full hover:bg-black hover:text-white transition-colors duration-200"
                                     >
                                         {isSubmitting
                                             ? "Publishing..."
