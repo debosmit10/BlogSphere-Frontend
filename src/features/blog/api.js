@@ -35,3 +35,14 @@ export const getSavedBlogs = async () => {
     const response = await ApiClient.get(`/blogs/saved`);
     return response.data;
 };
+
+// Enhance text with AI
+export const enhanceTextWithAI = async (text) => {
+    try {
+        const response = await ApiClient.post("/ai/enhance-text", { text });
+        return response.data;
+    } catch (error) {
+        console.error("Error enhancing text with AI:", error);
+        throw error;
+    }
+};

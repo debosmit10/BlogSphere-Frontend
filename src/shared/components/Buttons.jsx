@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PiStarFour, PiStarFourFill } from "react-icons/pi";
+import { CgSpinner } from "react-icons/cg";
 
 // Home Leftbar Button
 export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
@@ -25,17 +26,32 @@ export const FollowButton = ({ isFollowing, onClick }) => (
     </button>
 );
 
-export const AIButton = () => {
+export const AIButton = ({ onClick, isEnhancing }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <button
-            className="flex flex-row items-center justify-cente space-x-2 px-4 py-2 font-medium border border-purple-500 rounded-full hover:bg-purple-500 hover:text-white transition-colors duration-200"
+            onClick={onClick}
+            className={`flex flex-row items-center justify-cente space-x-2 px-4 py-2 font-medium border rounded-full transition-colors duration-200 ${
+                isEnhancing
+                    ? "bg-purple-500 text-white cursor-not-allowed"
+                    : "border-purple-500 hover:bg-purple-500 hover:text-white"
+            }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            disabled={isEnhancing}
         >
-            <span>Enhance</span>
-            {isHovered ? <PiStarFourFill /> : <PiStarFour />}
+            {isEnhancing ? (
+                <>
+                    <span>Enhancing</span>
+                    <CgSpinner className="animate-spin text-xl" />
+                </>
+            ) : (
+                <>
+                    <span>Enhance</span>
+                    {isHovered ? <PiStarFourFill /> : <PiStarFour />}
+                </>
+            )}
         </button>
     );
 };

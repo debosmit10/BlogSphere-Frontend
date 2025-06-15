@@ -1,19 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Header from "../../../shared/components/header";
-import {
-    PiPlusBold,
-    PiArrowCircleRightLight,
-    PiStarFour,
-} from "react-icons/pi";
+import { PiPlusBold, PiArrowCircleRightLight } from "react-icons/pi";
 import { BsChevronCompactUp, BsChevronCompactDown } from "react-icons/bs";
 import { AIButton } from "../../../shared/components/Buttons";
 import ApiClient from "../../../shared/api/ApiClient";
+import { enhanceTextWithAI } from "../api";
 
 const Write = () => {
     const [topics, setTopics] = useState([]);
     const [coverImage, setCoverImage] = useState(null);
     const [isTopicOpen, setIsTopicOpen] = useState(false);
+    const [isEnhancing, setIsEnhancing] = useState(false);
     const topicRef = useRef();
     const fileInputRef = useRef();
 
@@ -53,6 +51,19 @@ const Write = () => {
         if (!values.title) errors.title = "Title is required";
         if (!values.content) errors.content = "Content is required";
         return errors;
+    };
+
+    const handleEnhanceText = async (values, setFieldValue) => {
+        setIsEnhancing(true);
+        try {
+            const enhancedText = await enhanceTextWithAI(values.content);
+            setFieldValue("content", enhancedText);
+        } catch (error) {
+            console.error("Error enhancing text:", error);
+            alert("Failed to enhance text. Please try again.");
+        } finally {
+            setIsEnhancing(false);
+        }
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
@@ -98,7 +109,7 @@ const Write = () => {
                         validate={validate}
                         onSubmit={handleSubmit}
                     >
-                        {({ isSubmitting }) => (
+                        {({ values, isSubmitting, setFieldValue }) => (
                             <Form className="w-full max-w-170 space-y-8">
                                 {/* 1. Cover Image Input - Uncontrolled */}
                                 <div>
@@ -239,7 +250,16 @@ const Write = () => {
 
                                 {/* Submit Button */}
                                 <div className="flex flex-row justify-between text-right">
-                                    <AIButton />
+                                    <AIButton
+                                        onClick={() =>
+                                            handleEnhanceText(
+                                                values,
+                                                setFieldValue
+                                            )
+                                        }
+                                        isEnhancing={isEnhancing}
+                                        disabled={isEnhancing || isSubmitting}
+                                    />
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
