@@ -9,7 +9,11 @@ const ProtectedRoute = () => {
     if (isLoading) {
         return <div>Loading authentication status...</div>; // Or return null, or a spinner component
     }
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+    return isAuthenticated ? (
+        <Outlet />
+    ) : (
+        <Navigate to="/authentication" replace />
+    );
 };
 
 export default ProtectedRoute;

@@ -13,18 +13,27 @@ export const LeftbarButton = ({ icon: Icon, label, onClick }) => (
     </button>
 );
 
-export const FollowButton = ({ isFollowing, onClick }) => (
-    <button
-        onClick={onClick}
-        className={`px-2 py-0.5 w-fit rounded-full border ${
-            isFollowing
-                ? "bg-black text-white"
-                : "hover:bg-black hover:text-white"
-        } transition-colors duration-200 cursor-pointer`}
-    >
-        <span>{isFollowing ? "Following" : "Follow"}</span>
-    </button>
-);
+export const FollowButton = ({ isFollowing, onClick }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    return (
+        <button
+            onClick={onClick}
+            className={`px-2 py-0.5 w-23 rounded-full border ${
+                isFollowing
+                    ? "bg-black text-white hover:bg-white hover:text-black"
+                    : "hover:bg-black hover:text-white"
+            } transition-colors duration-200 cursor-pointer`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {isFollowing ? (
+                <span>{isHovered ? "Unfollow" : "Following"}</span>
+            ) : (
+                <span>Follow</span>
+            )}
+        </button>
+    );
+};
 
 export const AIButton = ({ onClick, isEnhancing }) => {
     const [isHovered, setIsHovered] = useState(false);
