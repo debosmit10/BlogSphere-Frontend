@@ -60,3 +60,13 @@ export const fetchRecentlyVisitedBlogs = async () => {
         throw error;
     }
 };
+
+export const deleteBlog = async (blogId) => {
+    try {
+        const response = await ApiClient.delete(`/blogs/${blogId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error deleting blog ${blogId}:`, error);
+        throw error;
+    }
+};
