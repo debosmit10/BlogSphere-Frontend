@@ -5,6 +5,7 @@ import Login from "../components/Login";
 import Registration from "../components/Registration";
 import ForgotPassword from "../components/ForgotPassword";
 import VerifyOtp from "../components/VerifyOtp";
+import ResetPassword from "../components/ResetPassword";
 
 const Authentication = () => {
     const [activeComponent, setActiveComponent] = useState("login");
@@ -22,6 +23,7 @@ const Authentication = () => {
     const switchToRegister = () => setActiveComponent("register");
     const switchToForgotPassword = () => setActiveComponent("forgotPassword");
     const switchToVerifyOtp = () => setActiveComponent("verifyOtp");
+    const switchToResetPassword = () => setActiveComponent("resetPassword");
 
     const renderComponent = () => {
         switch (activeComponent) {
@@ -42,7 +44,14 @@ const Authentication = () => {
                     />
                 );
             case "verifyOtp":
-                return <VerifyOtp switchToLogin={switchToLogin} />;
+                return (
+                    <VerifyOtp
+                        switchToLogin={switchToLogin}
+                        switchToResetPassword={switchToResetPassword}
+                    />
+                );
+            case "resetPassword":
+                return <ResetPassword switchToLogin={switchToLogin} />;
             default:
                 return (
                     <LoginComponent

@@ -5,6 +5,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const VerifyOtp = ({
+    switchToResetPassword,
     switchToLogin,
     initialCountdown = 30000, // 30 seconds in milliseconds
 }) => {
@@ -56,23 +57,18 @@ const VerifyOtp = ({
         }
     };
 
+    const handleSubmit = (values, { setSubmitting }) => {
+        // Logic to verify otp
+        setSubmitting(false);
+        switchToResetPassword();
+    };
+
     return (
         <Formik
             initialValues={{
                 otp: "",
             }}
-            onSubmit={async (values, { setSubmitting, setFieldError }) => {
-                try {
-                    await onVerify(values.otp);
-                } catch (error) {
-                    setFieldError(
-                        "otp",
-                        error.message || "Verification failed"
-                    );
-                } finally {
-                    setSubmitting(false);
-                }
-            }}
+            onSubmit={handleSubmit}
         >
             {({ isSubmitting }) => (
                 <Form className="flex flex-col items-center p-10 gap-y-5 w-1/2">
