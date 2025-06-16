@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../shared/components/header";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Link } from "react-router";
+import { Link, useParams, useNavigate } from "react-router";
+import { getBlogById, updateBlog } from "../api";
+import { getFileUrl } from "../../../shared/api/ApiClient";
+//import { getAllTopics } from "../../home/api";
 
 const Edit = () => {
+    const { id } = useParams(); // Get blog ID from URL
+    const navigate = useNavigate();
+    const [blog, setBlog] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [topics, setTopics] = useState([]);
+
+    useEffect(() => {
+        const fetchBlogAndTopics = async () => {
+            try {
+                const fetchedBlog = await getBlogById(id);
+                setBlog(fetchedBlog);
+            } catch (err) {
+                setError("Failed to load blog or topics.");
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogAndTopics();
+    }, [id]);
+
     const validate = (values) => {
         const errors = {};
         if (!values.title) errors.title = "Title is required";
@@ -11,7 +37,43 @@ const Edit = () => {
         return errors;
     };
 
-    const handleSubmit = async (values, { setSubmitting }) => {};
+    const handleSubmit = async (values, { setSubmitting }) => {
+        try {
+            const formData = new FormData();
+            formData.append("title", values.title);
+            formData.append("content", values.content);
+
+            await updateBlog(id, formData);
+            //alert("Blog updated successfully!");
+            navigate(`/blog/${id}`); // Redirect to updated blog page
+        } catch (err) {
+            setError("Failed to update blog.");
+            console.error(err);
+            /*alert(
+                "Failed to update blog: " + (err.response?.data || err.message)
+            );*/
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    if (loading) {
+        return <Header /> && <div className="p-7">Loading blog details...</div>;
+    }
+
+    if (error) {
+        return (
+            <Header /> && <div className="p-7 text-red-500">Error: {error}</div>
+        );
+    }
+
+    if (!blog) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -19,20 +81,21 @@ const Edit = () => {
             <div className="min-h-screen flex flex-col items-center py-7 font-syne">
                 <div className="w-full max-w-170 space-y-3">
                     <img
-                        src="https://wallpapercave.com/wp/wp12025786.jpg"
+                        src={getFileUrl("blog-images", blog.imageUrl)}
                         alt="Blog Cover"
                         className="aspect-16/9 object-cover w-full h-full rounded-xl"
                     />
                     <span className="mb-2 font-medium text-neutral-600 hover:underline">
-                        #Life
+                        #{blog.topicDisplayName}
                     </span>
                     <Formik
                         initialValues={{
-                            title: "Original blog's title...",
-                            content: "Original blog's content ",
+                            title: blog.title || "",
+                            content: blog.content || "",
                         }}
                         validate={validate}
                         onSubmit={handleSubmit}
+                        enableReinitialize={true}
                     >
                         {({ isSubmitting }) => (
                             <Form className="space-y-7">
@@ -71,12 +134,12 @@ const Edit = () => {
 
                                 {/* Submit Button */}
                                 <div className="text-right space-x-5">
-                                    <Link
-                                        to={`/home`}
+                                    {/* <Link
+                                        to={`/blog/${id}`}
                                         className="px-6 py-2 font-medium border rounded-full hover:bg-black hover:text-white transition-colors duration-200"
                                     >
                                         Cancel
-                                    </Link>
+                                    </Link> */}
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}

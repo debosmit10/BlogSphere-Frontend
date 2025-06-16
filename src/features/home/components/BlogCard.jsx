@@ -9,7 +9,7 @@ import {
     PiDotsThreeBold,
     PiShieldCheck,
 } from "react-icons/pi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { getFileUrl } from "../../../shared/api/ApiClient";
 import { formatDate } from "../../../shared/utils/dateUtils";
 import {
@@ -30,6 +30,7 @@ const BlogCard = ({ blog }) => {
     const [isSaveLoading, setIsSaveLoading] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     const { user } = useAuth();
 
@@ -135,6 +136,12 @@ const BlogCard = ({ blog }) => {
         }
     };
 
+    const handleEditClick = () => {
+        if (blog?.id && canEdit) {
+            navigate(`/edit/${blog.id}`); // Navigate to edit
+        }
+    };
+
     // Safe checks for undefined values
     if (!blog) {
         return (
@@ -232,7 +239,10 @@ const BlogCard = ({ blog }) => {
                                 className="absolute left-25 bottom-1.5 w-fit bg-white border border-neutral-200 rounded-xl shadow z-10 overflow-hidden"
                             >
                                 {canEdit && (
-                                    <button className="dropdown-list">
+                                    <button
+                                        onClick={handleEditClick}
+                                        className="dropdown-list"
+                                    >
                                         Edit
                                     </button>
                                 )}
