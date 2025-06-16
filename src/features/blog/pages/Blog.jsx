@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../../shared/components/header";
 import { Link, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { FollowButton } from "../../../shared/components/Buttons";
 import {
     PiThumbsUp,
@@ -23,6 +24,7 @@ import {
     getSavedStatus,
     toggleSavedStatus,
 } from "../../blog/api";
+import { deleteBlog } from "../../home/api";
 import { useAuth } from "../../../shared/contexts/AuthContext";
 
 const Blog = () => {
@@ -35,9 +37,19 @@ const Blog = () => {
     const [isLikeLoading, setIsLikeLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isSaveLoading, setIsSaveLoading] = useState(false);
-    const [comments, setComments] = useState([]); // New state for comments
-    const [commentsLoading, setCommentsLoading] = useState(true); // New state for comments loading
-    const [commentsError, setCommentsError] = useState(null); // New state for comments error
+    const [comments, setComments] = useState([]);
+    const [commentsLoading, setCommentsLoading] = useState(true);
+    const [commentsError, setCommentsError] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+
+    const { user } = useAuth();
+    console.log("Author ID: ", blog?.authorId);
+    const canDelete =
+        user && (user.id === blog?.authorId || user.role === "ROLE_ADMIN");
+
+    const canEdit = user && user.id === blog?.authorId;
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -60,7 +72,6 @@ const Blog = () => {
             if (!id) return;
 
             try {
-                // Fetch like status, like count, and saved status in parallel
                 const [likeStatus, likesCount, savedStatus] = await Promise.all(
                     [
                         getLikeStatus(blog.id),
@@ -118,6 +129,22 @@ const Blog = () => {
         }
     }, [id, loading, error, blog]);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     // Handle like button click
     const handleLikeClick = async () => {
         if (!id || isLikeLoading) return;
@@ -153,6 +180,29 @@ const Blog = () => {
             alert("Failed to update saved status. Please try again.");
         } finally {
             setIsSaveLoading(false);
+        }
+    };
+
+    const handleDeleteClick = async () => {
+        if (!blog?.id || !canDelete) return;
+
+        if (window.confirm("Are you sure you want to delete this blog?")) {
+            try {
+                await deleteBlog(blog.id);
+                alert("Blog deleted successfully!");
+                /*if (onDeleteSuccess) {
+                        onDeleteSuccess(blog.id); // Notify parent component to remove the blog
+                    }*/
+            } catch (error) {
+                console.error("Error deleting blog:", error);
+                alert("Failed to delete blog. Please try again.");
+            }
+        }
+    };
+
+    const handleEditClick = () => {
+        if (blog?.id && canEdit) {
+            navigate(`/edit/${blog.id}`); // Navigate to edit
         }
     };
 
@@ -218,7 +268,7 @@ const Blog = () => {
                                         )}
                                     {/* <FollowButton /> */}
                                 </div>
-                                <div className="flex flex-row space-x-3 items-center">
+                                <div className="relative flex flex-row space-x-3 items-center">
                                     <span>{formatDate(blog.createdAt)}</span>
                                     <div className="flex flex-row space-x-2 items-center transition-colors duration-200 ease-in-out">
                                         <button
@@ -261,9 +311,36 @@ const Blog = () => {
                                             <PiBookmarksSimple className="text-2xl hover:text-blue-600 transition-colors duration-200" />
                                         )}
                                     </button>
-                                    <button>
+                                    <button
+                                        onClick={() =>
+                                            setIsDropdownOpen(!isDropdownOpen)
+                                        }
+                                    >
                                         <PiDotsThreeBold className="text-2xl rounded-sm hover:bg-neutral-200 transition-colors duration-200 ease-in-out" />
                                     </button>
+                                    {isDropdownOpen && (
+                                        <div
+                                            ref={dropdownRef}
+                                            className="absolute left-40 w-fit bg-white border border-neutral-200 rounded-xl shadow z-10 overflow-hidden"
+                                        >
+                                            {canEdit && (
+                                                <button
+                                                    onClick={handleEditClick}
+                                                    className="dropdown-list"
+                                                >
+                                                    Edit
+                                                </button>
+                                            )}
+                                            {canDelete && (
+                                                <button
+                                                    onClick={handleDeleteClick}
+                                                    className="dropdown-list text-red-500"
+                                                >
+                                                    Delete
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

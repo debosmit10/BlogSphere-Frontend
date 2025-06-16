@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import ResetPasswordSchema from "../schema/ResetPasswordSchema";
 import { resetPassword } from "../api";
+import { CgSpinner } from "react-icons/cg";
 
 const ResetPassword = ({ switchToLogin, email }) => {
     const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
@@ -72,13 +73,18 @@ const ResetPassword = ({ switchToLogin, email }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`rounded-full px-4 py-2 text-white font-semibold w-full ${
-                            isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-black hover:bg-gray-900"
+                        className={`flex flex-row justify-center space-x-2 rounded-full px-4 py-2 text-white bg-black font-semibold w-full cursor-pointer ${
+                            isSubmitting ? "cursor-not-allowed" : ""
                         }`}
                     >
-                        {isSubmitting ? "Resetting..." : "Reset Password"}
+                        {isSubmitting ? (
+                            <>
+                                <span>Resetting</span>
+                                <CgSpinner className="animate-spin text-xl" />
+                            </>
+                        ) : (
+                            <span>Reset</span>
+                        )}
                     </button>
 
                     <button

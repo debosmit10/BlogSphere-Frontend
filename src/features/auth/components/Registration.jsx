@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import RegistrationSchema from "../schema/RegistrationSchema";
 import { registerUser } from "../api";
+import { CgSpinner } from "react-icons/cg";
 
 const Registration = ({ switchToLogin }) => {
     const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
@@ -111,13 +112,18 @@ const Registration = ({ switchToLogin }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`rounded-full px-4 py-2 text-white font-semibold w-full ${
-                            isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-black hover:bg-gray-900"
+                        className={`flex flex-row justify-center space-x-2 rounded-full px-4 py-2 text-white bg-black font-semibold w-full cursor-pointer ${
+                            isSubmitting ? "cursor-not-allowed" : ""
                         }`}
                     >
-                        {isSubmitting ? "Submitting..." : "Register"}
+                        {isSubmitting ? (
+                            <>
+                                <span>Registering</span>
+                                <CgSpinner className="animate-spin text-xl" />
+                            </>
+                        ) : (
+                            <span>Register</span>
+                        )}
                     </button>
                     <button
                         type="button"

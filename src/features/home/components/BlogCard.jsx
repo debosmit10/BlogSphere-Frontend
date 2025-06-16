@@ -45,7 +45,6 @@ const BlogCard = ({ blog }) => {
             if (!blog?.id) return;
 
             try {
-                // Fetch like status, like count, and saved status in parallel
                 const [likeStatus, likesCount, savedStatus] = await Promise.all(
                     [
                         getLikeStatus(blog.id),

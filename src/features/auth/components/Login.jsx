@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import LoginSchema from "../schema/LoginSchema";
 import { loginUser } from "../api";
-import { useAuth } from "../../../shared/contexts/AuthContext"; // Import useAuth hook
+import { useAuth } from "../../../shared/contexts/AuthContext";
+import { CgSpinner } from "react-icons/cg";
 
 const Login = ({ switchToRegister, switchToForgotPassword }) => {
     const { login, isAuthenticated } = useAuth();
@@ -102,13 +103,18 @@ const Login = ({ switchToRegister, switchToForgotPassword }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`rounded-full px-4 py-2 text-white font-semibold w-full ${
-                            isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-black hover:bg-gray-900"
+                        className={`flex flex-row justify-center space-x-2 rounded-full px-4 py-2 text-white bg-black font-semibold w-full cursor-pointer ${
+                            isSubmitting ? "cursor-not-allowed" : ""
                         }`}
                     >
-                        {isSubmitting ? "Submitting..." : "Login"}
+                        {isSubmitting ? (
+                            <>
+                                <span>Logging In</span>
+                                <CgSpinner className="animate-spin text-xl" />
+                            </>
+                        ) : (
+                            <span>Login</span>
+                        )}
                     </button>
                     <button
                         type="button"
