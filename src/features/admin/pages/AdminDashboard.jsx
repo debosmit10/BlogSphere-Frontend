@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import Header from "../../../shared/components/header";
 import AnalyticsCard from "../components/AnalyticsCard";
-import CategoryManagement from "../components/CategoryManagement";
-import SiteManagement from "../components/SiteManagement";
+// import CategoryManagement from "../components/CategoryManagement";
+// import SiteManagement from "../components/SiteManagement";
 import UserManagement from "../components/UserManagement";
-import ReportManagement from "../components/ReportManagement";
+// import ReportManagement from "../components/ReportManagement";
 import { PiUsers, PiArticle, PiChatCircle, PiCalendar } from "react-icons/pi";
 import { fetchDashboardStats, fetchAllUsers } from "../api";
 
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Main Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <CategoryManagement
                             categories={categories}
                             setCategories={setCategories}
@@ -198,14 +198,14 @@ const AdminDashboard = () => {
                             maintenanceMode={maintenanceMode}
                             setMaintenanceMode={setMaintenanceMode}
                         />
-                    </div>
+                    </div>*/}
 
                     <UserManagement users={users} setUsers={setUsers} />
 
-                    <ReportManagement
+                    {/* <ReportManagement
                         reports={reports}
                         setReports={setReports}
-                    />
+                    /> */}
                 </div>
             </div>
         </>

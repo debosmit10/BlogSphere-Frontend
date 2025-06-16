@@ -5,6 +5,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import VerifyOtpSchema from "../schema/VerifyOtpSchema";
 import { forgotPassword, verifyOtp } from "../api";
+import { CgSpinner } from "react-icons/cg";
 
 const VerifyOtp = ({
     switchToResetPassword,
@@ -131,13 +132,18 @@ const VerifyOtp = ({
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`rounded-full px-4 py-2 text-white font-semibold w-full ${
-                            isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-black hover:bg-gray-900"
+                        className={`flex flex-row justify-center space-x-2 rounded-full px-4 py-2 text-white bg-black font-semibold w-full cursor-pointer ${
+                            isSubmitting ? "cursor-not-allowed" : ""
                         }`}
                     >
-                        {isSubmitting ? "Verifying..." : "Verify"}
+                        {isSubmitting ? (
+                            <>
+                                <span>Verifying</span>
+                                <CgSpinner className="animate-spin text-xl" />
+                            </>
+                        ) : (
+                            <span>Verify</span>
+                        )}
                     </button>
                     {/* <button
                             type="button"

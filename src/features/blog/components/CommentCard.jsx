@@ -71,7 +71,9 @@ const CommentCard = ({ comment }) => {
                         }}
                     />
                 </Link>
-                <Link to={`/profile/${comment.userId}`}>Username</Link>
+                <Link to={`/profile/${comment.userId}`}>
+                    {comment.username}
+                </Link>
                 <span>{formatDate(comment.createdAt)}</span>
             </div>
             <p>{comment.content}</p>
