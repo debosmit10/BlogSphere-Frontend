@@ -9,6 +9,7 @@ import ResetPassword from "../components/ResetPassword";
 
 const Authentication = () => {
     const [activeComponent, setActiveComponent] = useState("login");
+    const [userEmail, setUserEmail] = useState("");
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
@@ -21,9 +22,18 @@ const Authentication = () => {
 
     const switchToLogin = () => setActiveComponent("login");
     const switchToRegister = () => setActiveComponent("register");
-    const switchToForgotPassword = () => setActiveComponent("forgotPassword");
-    const switchToVerifyOtp = () => setActiveComponent("verifyOtp");
-    const switchToResetPassword = () => setActiveComponent("resetPassword");
+    const switchToForgotPassword = (email = "") => {
+        setUserEmail(email);
+        setActiveComponent("forgotPassword");
+    };
+    const switchToVerifyOtp = (email) => {
+        setUserEmail(email);
+        setActiveComponent("verifyOtp");
+    };
+    const switchToResetPassword = (email) => {
+        setUserEmail(email);
+        setActiveComponent("resetPassword");
+    };
 
     const renderComponent = () => {
         switch (activeComponent) {
@@ -48,10 +58,17 @@ const Authentication = () => {
                     <VerifyOtp
                         switchToLogin={switchToLogin}
                         switchToResetPassword={switchToResetPassword}
+                        switchToForgotPassword={switchToForgotPassword}
+                        email={userEmail}
                     />
                 );
             case "resetPassword":
-                return <ResetPassword switchToLogin={switchToLogin} />;
+                return (
+                    <ResetPassword
+                        switchToLogin={switchToLogin}
+                        email={userEmail}
+                    />
+                );
             default:
                 return (
                     <LoginComponent

@@ -1,15 +1,23 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import ResetPasswordSchema from "../schema/ResetPasswordSchema";
+import { resetPassword } from "../api";
 
-const ResetPassword = ({ switchToLogin }) => {
+const ResetPassword = ({ switchToLogin, email }) => {
     const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
         try {
-            //await...
+            const response = await resetPassword(
+                email,
+                values.newPassword,
+                values.confirmNewPassword
+            );
+            console.log(response.data);
             switchToLogin(); // Switch to login after successful password reset
         } catch (error) {
+            console.error("Reset password error:", error);
             setFieldError(
                 "newPassword",
-                error.message || "Password reset failed"
+                error.response?.data || "Password reset failed"
             );
         } finally {
             setSubmitting(false);
@@ -22,6 +30,7 @@ const ResetPassword = ({ switchToLogin }) => {
                 newPassword: "",
                 confirmNewPassword: "",
             }}
+            validationSchema={ResetPasswordSchema}
             onSubmit={handleSubmit}
         >
             {({ isSubmitting }) => (

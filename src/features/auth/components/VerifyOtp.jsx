@@ -3,10 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import Countdown from "react-countdown";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import VerifyOtpSchema from "../schema/VerifyOtpSchema";
+import { forgotPassword, verifyOtp } from "../api";
 
 const VerifyOtp = ({
     switchToResetPassword,
     switchToLogin,
+    email,
     initialCountdown = 30000, // 30 seconds in milliseconds
 }) => {
     const [countdownDate, setCountdownDate] = useState(
@@ -47,20 +50,29 @@ const VerifyOtp = ({
     const handleResendOtp = async () => {
         setIsResending(true);
         try {
-            //await onResendOtp();
+            await forgotPassword(email);
+            console.log("Resending OTP to:", email);
             setCountdownDate(Date.now() + initialCountdown);
             setShowResend(false);
         } catch (error) {
-            console.error("Error resending OTP:", error);
+            console.error("Resend OTP error:", error);
+            alert("Failed to resend OTP. Please try again.");
         } finally {
             setIsResending(false);
         }
     };
 
-    const handleSubmit = (values, { setSubmitting }) => {
-        // Logic to verify otp
-        setSubmitting(false);
-        switchToResetPassword();
+    const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+        try {
+            const response = await verifyOtp(email, values.otp);
+            console.log(response.data);
+            switchToResetPassword(email);
+        } catch (error) {
+            console.error("Verify OTP error:", error);
+            setFieldError("otp", error.response?.data || "Invalid OTP.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -68,6 +80,7 @@ const VerifyOtp = ({
             initialValues={{
                 otp: "",
             }}
+            validationSchema={VerifyOtpSchema}
             onSubmit={handleSubmit}
         >
             {({ isSubmitting }) => (
@@ -126,7 +139,13 @@ const VerifyOtp = ({
                     >
                         {isSubmitting ? "Verifying..." : "Verify"}
                     </button>
-
+                    {/* <button
+                            type="button"
+                            onClick={() => switchToForgotPassword(email)}
+                            className="text-sm hover:underline cursor-pointer"
+                        >
+                            Back to Forgot Password
+                    </button> */}
                     <button
                         type="button"
                         onClick={switchToLogin}

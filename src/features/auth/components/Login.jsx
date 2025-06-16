@@ -59,7 +59,7 @@ const Login = ({ switchToRegister, switchToForgotPassword }) => {
             validationSchema={LoginSchema}
             onSubmit={handleSubmit}
         >
-            {({ errors, touched, isSubmitting }) => (
+            {({ values, errors, touched, isSubmitting }) => (
                 <Form className="flex flex-col items-center p-10 gap-y-5 w-1/2">
                     <h1 className="font-reservation font-bold text-5xl self-start">
                         Login.
@@ -94,7 +94,7 @@ const Login = ({ switchToRegister, switchToForgotPassword }) => {
                     </div>
                     <button
                         type="button"
-                        onClick={switchToForgotPassword}
+                        onClick={() => switchToForgotPassword(values.username)}
                         className="text-sm hover:underline cursor-pointer"
                     >
                         Forgot Password?

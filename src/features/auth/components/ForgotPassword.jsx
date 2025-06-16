@@ -1,12 +1,20 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import ForgotPasswordSchema from "../schema/ForgotPasswordSchema";
+import { forgotPassword } from "../api";
 
 const ForgotPassword = ({ switchToLogin, switchToVerifyOtp }) => {
-    const handleSubmit = (values, { setSubmitting }) => {
-        // Handle password reset logic here
-        console.log("Password reset requested for:", values.email);
-        setSubmitting(false);
-        switchToVerifyOtp();
+    const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+        try {
+            const response = await forgotPassword(values.email);
+            console.log(response.data);
+            switchToVerifyOtp(values.email); // Pass email to verify OTP component
+        } catch (error) {
+            console.error("Forgot password error:", error);
+            setFieldError("email", error.response?.data || "An error occurred");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -14,6 +22,7 @@ const ForgotPassword = ({ switchToLogin, switchToVerifyOtp }) => {
             initialValues={{
                 email: "",
             }}
+            validationSchema={ForgotPasswordSchema}
             onSubmit={handleSubmit}
         >
             {({ isSubmitting }) => (
