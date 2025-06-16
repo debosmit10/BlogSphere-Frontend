@@ -3,7 +3,9 @@ import Header from "../../../shared/components/header";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useParams, useNavigate } from "react-router";
 import { getBlogById, updateBlog } from "../api";
-import { getFileUrl } from "../../../shared/api/ApiClient";
+import ApiClient, { getFileUrl } from "../../../shared/api/ApiClient";
+import { AIButton } from "../../../shared/components/Buttons";
+import { enhanceTextWithAI } from "../api";
 //import { getAllTopics } from "../../home/api";
 
 const Edit = () => {
@@ -12,7 +14,7 @@ const Edit = () => {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [topics, setTopics] = useState([]);
+    const [isEnhancing, setIsEnhancing] = useState(false);
 
     useEffect(() => {
         const fetchBlogAndTopics = async () => {
@@ -35,6 +37,19 @@ const Edit = () => {
         if (!values.title) errors.title = "Title is required";
         if (!values.content) errors.content = "Content is required";
         return errors;
+    };
+
+    const handleEnhanceText = async (values, setFieldValue) => {
+        setIsEnhancing(true);
+        try {
+            const enhancedText = await enhanceTextWithAI(values.content);
+            setFieldValue("content", enhancedText);
+        } catch (error) {
+            console.error("Error enhancing text:", error);
+            alert("Failed to enhance text. Please try again.");
+        } finally {
+            setIsEnhancing(false);
+        }
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
@@ -97,7 +112,7 @@ const Edit = () => {
                         onSubmit={handleSubmit}
                         enableReinitialize={true}
                     >
-                        {({ isSubmitting }) => (
+                        {({ values, isSubmitting, setFieldValue }) => (
                             <Form className="space-y-7">
                                 {/* 3. Title Input */}
                                 <div>
@@ -133,13 +148,23 @@ const Edit = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <div className="text-right space-x-5">
+                                <div className="flex flex-row justify-between text-right">
                                     {/* <Link
                                         to={`/blog/${id}`}
                                         className="px-6 py-2 font-medium border rounded-full hover:bg-black hover:text-white transition-colors duration-200"
                                     >
                                         Cancel
                                     </Link> */}
+                                    <AIButton
+                                        onClick={() =>
+                                            handleEnhanceText(
+                                                values,
+                                                setFieldValue
+                                            )
+                                        }
+                                        isEnhancing={isEnhancing}
+                                        disabled={isEnhancing || isSubmitting}
+                                    />
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
