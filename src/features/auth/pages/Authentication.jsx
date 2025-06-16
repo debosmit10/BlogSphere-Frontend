@@ -71,7 +71,7 @@ const Authentication = () => {
                 );
             default:
                 return (
-                    <LoginComponent
+                    <Login
                         switchToRegister={switchToRegister}
                         switchToForgotPassword={switchToForgotPassword}
                     />

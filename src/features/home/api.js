@@ -10,6 +10,17 @@ export const fetchAllBlogs = async () => {
     }
 };
 
+export const fetchBlogsByTopic = async (topic) => {
+    try {
+        console.log("API function topic : ", topic);
+        const response = await ApiClient.get(`/blogs/topic/${topic}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching blogs by topic:", error);
+        throw error;
+    }
+};
+
 export const fetchUserBlogs = async () => {
     try {
         const response = await ApiClient.get("/blogs/my-blogs");
@@ -67,6 +78,16 @@ export const deleteBlog = async (blogId) => {
         return response.data;
     } catch (error) {
         console.error(`Error deleting blog ${blogId}:`, error);
+        throw error;
+    }
+};
+
+export const getAllTopics = async () => {
+    try {
+        const response = await ApiClient.get("/blogs/topics");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching topics:", error);
         throw error;
     }
 };
