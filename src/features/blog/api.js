@@ -1,5 +1,29 @@
 import ApiClient from "../../shared/api/ApiClient";
 
+export const getBlogById = async (blogId) => {
+    try {
+        const response = await ApiClient.get(`/blogs/${blogId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching blog by ID:", error);
+        throw error;
+    }
+};
+
+export const updateBlog = async (blogId, blogData) => {
+    try {
+        const response = await ApiClient.put(`/blogs/${blogId}`, blogData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating blog:", error);
+        throw error;
+    }
+};
+
 // Toggle like status for a blog
 export const toggleLike = async (blogId) => {
     const response = await ApiClient.post(`/blogs/${blogId}/likes`);
