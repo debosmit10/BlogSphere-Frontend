@@ -1,12 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import Feed from "./Feed";
 import FeedFollowing from "./FeedFollowing";
+import FeedTopic from "./FeedTopic";
+import { getAllTopics } from "../api";
 import { PiArrowCircleLeft } from "react-icons/pi";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
 const MiddleBar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [activeView, setActiveView] = useState("forYou");
+    const [activeFeedView, setActiveFeedView] = useState("feed");
+    const [topics, setTopics] = useState([]);
+    const [selectedTopic, setSelectedTopic] = useState(null);
     const menuRef = useRef();
 
     useEffect(() => {
@@ -21,14 +26,49 @@ const MiddleBar = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const fetchTopics = async () => {
+            try {
+                const fetchedTopics = await getAllTopics();
+                setTopics(fetchedTopics);
+            } catch (error) {
+                console.error("Failed to fetch topics:", error);
+            }
+        };
+        fetchTopics();
+    }, []);
+
     const handleForYouClick = () => {
         setActiveView("forYou");
+        setActiveFeedView("feed");
+        setSelectedTopic(null);
         setMenuOpen(false);
     };
 
     const handleFollowingClick = () => {
         setActiveView("following");
+        setActiveFeedView("following");
+        setSelectedTopic(null);
         setMenuOpen(false);
+    };
+
+    const handleTopicClick = (topicName) => {
+        setActiveView("forYou");
+        setActiveFeedView("topic");
+        setSelectedTopic(topicName);
+    };
+
+    const renderFeedComponent = () => {
+        switch (activeFeedView) {
+            case "forYou":
+                return <Feed />;
+            case "following":
+                return <FeedFollowing />;
+            case "topic":
+                return <FeedTopic selectedTopic={selectedTopic} />;
+            default:
+                return <Feed />;
+        }
     };
 
     return (
@@ -71,17 +111,20 @@ const MiddleBar = () => {
                 <div className="flex flex-row items-center space-x-2 pb-5">
                     <BsChevronCompactLeft className="text-xl text-neutral-300" />
                     <div className="flex flex-row w-80 space-x-2 overflow-auto scrollbar-hidden">
-                        <button className="cursor-pointer">Technology</button>
-                        <button className="cursor-pointer">Health</button>
-                        <button className="cursor-pointer">Art</button>
-                        <button className="cursor-pointer">Productivity</button>
-                        <button className="cursor-pointer">Gaming</button>
-                        <button className="cursor-pointer">World</button>
+                        {topics.map((topic) => (
+                            <button
+                                key={topic.name}
+                                onClick={() => handleTopicClick(topic.name)}
+                                className="whitespace-nowrap hover:underline cursor-pointer"
+                            >
+                                {topic.displayName}
+                            </button>
+                        ))}
                     </div>
                     <BsChevronCompactRight className="text-xl text-neutral-300" />
                 </div>
             </div>
-            {activeView === "forYou" ? <Feed /> : <FeedFollowing />}
+            {renderFeedComponent()}
         </div>
     );
 };
