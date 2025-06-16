@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     PiThumbsUp,
     PiThumbsUpFill,
@@ -19,6 +19,8 @@ import {
     getSavedStatus,
     toggleSavedStatus,
 } from "../../blog/api";
+import { deleteBlog } from "../../home/api";
+import { useAuth } from "../../../shared/contexts/AuthContext";
 
 const BlogCard = ({ blog }) => {
     const [isLiked, setIsLiked] = useState(false);
@@ -26,6 +28,15 @@ const BlogCard = ({ blog }) => {
     const [isLikeLoading, setIsLikeLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isSaveLoading, setIsSaveLoading] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const { user } = useAuth();
+
+    const canDelete =
+        user && (user.id === blog.authorId || user.role === "ROLE_ADMIN");
+
+    const canEdit = user && user.id === blog.authorId;
 
     // Fetch like and save status and count when component mounts
     useEffect(() => {
@@ -52,6 +63,22 @@ const BlogCard = ({ blog }) => {
 
         fetchLikeData();
     }, [blog?.id]);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // Handle like button click
     const handleLikeClick = async () => {
@@ -88,6 +115,23 @@ const BlogCard = ({ blog }) => {
             alert("Failed to update saved status. Please try again.");
         } finally {
             setIsSaveLoading(false);
+        }
+    };
+
+    const handleDeleteClick = async () => {
+        if (!blog?.id || !canDelete) return;
+
+        if (window.confirm("Are you sure you want to delete this blog?")) {
+            try {
+                await deleteBlog(blog.id);
+                alert("Blog deleted successfully!");
+                /*if (onDeleteSuccess) {
+                    onDeleteSuccess(blog.id); // Notify parent component to remove the blog
+                }*/
+            } catch (error) {
+                console.error("Error deleting blog:", error);
+                alert("Failed to delete blog. Please try again.");
+            }
         }
     };
 
@@ -164,7 +208,7 @@ const BlogCard = ({ blog }) => {
                             <span>{blog.commentCount}</span>
                         </button>
                     </div>
-                    <div className="flex flex-row items-center space-x-4">
+                    <div className="relative flex flex-row items-center space-x-4">
                         <button
                             onClick={handleSaveClick}
                             disabled={isSaveLoading}
@@ -177,9 +221,31 @@ const BlogCard = ({ blog }) => {
                                 <PiBookmarksSimple className="text-2xl hover:text-blue-600 transition-colors duration-200" />
                             )}
                         </button>
-                        <button>
+                        <button
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        >
                             <PiDotsThreeBold className="text-2xl rounded-sm hover:bg-neutral-200 transition-colors duration-200 ease-in-out" />
                         </button>
+                        {isDropdownOpen && (
+                            <div
+                                ref={dropdownRef}
+                                className="absolute left-25 bottom-1.5 w-fit bg-white border border-neutral-200 rounded-xl shadow z-10 overflow-hidden"
+                            >
+                                {canEdit && (
+                                    <button className="dropdown-list">
+                                        Edit
+                                    </button>
+                                )}
+                                {canDelete && (
+                                    <button
+                                        onClick={handleDeleteClick}
+                                        className="dropdown-list text-red-500"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -190,7 +256,6 @@ const BlogCard = ({ blog }) => {
                     src={getFileUrl("blog-images", blog.imageUrl)}
                     alt="Blog cover"
                     className="w-3/10 rounded-xl aspect-16/9 object-cover"
-                    loading="lazy"
                 />
             )}
         </div>
