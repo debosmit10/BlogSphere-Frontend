@@ -7,7 +7,7 @@ import {
     PiClockCounterClockwise,
 } from "react-icons/pi";
 import { LeftbarButton } from "../../../shared/components/Buttons";
-import ContinueReadingCard from "./ContinueReadingCard";
+import ContinueReading from "./ContinueReading";
 import { Link } from "react-router";
 
 const LeftBar = ({ activeView, setActiveView }) => {
@@ -40,9 +40,9 @@ const LeftBar = ({ activeView, setActiveView }) => {
                         <span className="text-xl ">Write</span>
                     </Link>
                 </li>
-                <li>
+                {/* <li>
                     <LeftbarButton icon={PiNote} label="Drafts" />
-                </li>
+                </li> */}
                 <li>
                     <LeftbarButton
                         icon={PiBookmarksSimple}
@@ -55,12 +55,7 @@ const LeftBar = ({ activeView, setActiveView }) => {
                 <PiClockCounterClockwise />
                 <span>Continue Reading</span>
             </div>
-            <div className="">
-                {/* All the continue reading cards will apprear here */}
-                <ContinueReadingCard />
-                <ContinueReadingCard />
-                <ContinueReadingCard />
-            </div>
+            <ContinueReading />
         </div>
     );
 };
