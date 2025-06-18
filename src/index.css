@@ -1,24 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap");
 @import "tailwindcss";
+
 @font-face {
     font-family: "ReservationWide";
-    src: url(./shared/assets/fonts/ReservationWide-Regular.ttf)
+    src: url(./shared/assets/fonts/Reservation-Wide-Regular.ttf)
         format("truetype");
     font-weight: 400;
 }
 @font-face {
     font-family: "ReservationWide";
-    src: url(./shared/assets/fonts/ReservationWide-Bold.ttf) format("truetype");
+    src: url(./shared/assets/fonts/Reservation-Wide-Bold.ttf) format("truetype");
     font-weight: 700;
 }
 @font-face {
-    font-family: "Syne";
-    src: url(./shared/assets/fonts/Syne.ttf) format("truetype");
-    font-weight: 400;
+    font-family: "ReservationWide";
+    src: url(./shared/assets/fonts/Reservation-Wide-Black.ttf)
+        format("truetype");
+    font-weight: 900;
 }
 
 @theme {
     --font-reservation: ReservationWide, sans-serif;
     --font-syne: Syne, sans-serif;
+    --font-montserrat: Montserrat, sans-serif;
+    --font-roboto: Roboto, sans-serif;
+}
+
+@utility scrollbar-hidden {
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 :root {
@@ -30,4 +43,8 @@
 * {
     box-sizing: border-box;
     /* font-family: ReservationWide, Arial, sans-serif; */
+}
+
+.dropdown-list {
+    @apply flex flex-row items-center w-full space-x-2 px-4 py-2 hover:bg-neutral-100 cursor-pointer transition-colors duration-200;
 }

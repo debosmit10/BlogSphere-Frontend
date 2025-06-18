@@ -24,7 +24,7 @@ const LandingPage = () => {
                             <Link to="/contact">Contact</Link>
                         </li>
                         <li>
-                            <Link to="/login">Login</Link>
+                            <Link to="/authentication">Login</Link>
                         </li>
                     </ul>
                 </nav>
