@@ -108,7 +108,7 @@ const AdminDashboard = () => {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-50 font-syne">
+            <div className="min-h-screen font-syne">
                 <div className="max-w-7xl mx-auto px-4 py-8">
                     {/* Page Header */}
                     <div className="mb-8">
