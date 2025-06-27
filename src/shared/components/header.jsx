@@ -138,10 +138,10 @@ const Header = () => {
                                             </li>
                                         </Link>
                                     )}
-                                    <li className="dropdown-list">
+                                    {/* <li className="dropdown-list">
                                         <PiGearSix className="text-2xl" />
                                         <span>Settings</span>
-                                    </li>
+                                    </li> */}
                                     <li className="hover:bg-neutral-100 transition-colors duration-200">
                                         <button
                                             onClick={handleLogout}

@@ -6,6 +6,7 @@ import { BsChevronCompactUp, BsChevronCompactDown } from "react-icons/bs";
 import { AIButton } from "../../../shared/components/Buttons";
 import ApiClient from "../../../shared/api/ApiClient";
 import { enhanceTextWithAI } from "../api";
+import { useNavigate } from "react-router";
 
 const Write = () => {
     const [topics, setTopics] = useState([]);
@@ -14,6 +15,7 @@ const Write = () => {
     const [isEnhancing, setIsEnhancing] = useState(false);
     const topicRef = useRef();
     const fileInputRef = useRef();
+    const navigate = useNavigate();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
