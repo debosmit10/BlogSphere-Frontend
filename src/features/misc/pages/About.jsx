@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
+import { FaGithub } from "react-icons/fa";
+
 const About = () => {
     return (
         <div className="font-syne min-h-screen bg-white text-gray-900">
@@ -41,13 +43,13 @@ const About = () => {
                                 thousands who appreciate substance over style.
                             </p>
                         </div>
-                        <div className="h-70 md:h-80 flex items-center justify-center">
+                        {/* <div className="h-70 md:h-80 flex items-center justify-center">
                             <img
-                                src="src/shared/assets/images/team-image.jpg"
+                                src="src/shared/assets/images/"
                                 alt="Team Picture"
-                                className="rounded-xl"
+                                className="rounded-xl object-cover aspect-square h-100"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </section>
 
@@ -131,33 +133,31 @@ const About = () => {
                     <h2 className="font-reservation text-3xl font-bold mb-12 border-b-2 border-black pb-2 inline-block">
                         The Minds Behind BlogSphere
                     </h2>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-15">
                         {[
-                            {
-                                image: "Somik",
-                                name: "Somik Acharjee",
-                                role: "Founder & Frontend Developer",
-                                bio: "Crafts pixel-perfect, user-friendly interfaces.",
-                            },
                             {
                                 name: "Debosmit Karmakar",
                                 role: "Founder & Full-Stack Developer",
-                                bio: "Leads the vision while building robust end-to-end systems.",
+
+                                github: "debosmit10",
+                            },
+                            {
+                                name: "Somik Acharjee",
+                                role: "UI/UX Designer",
+
+                                github: "Somik-11",
                             },
                             {
                                 name: "Shantonu Ganguly",
                                 role: "Backend Developer",
-                                bio: "Ensures seamless server logic and database performance.",
+
+                                github: "shan785",
                             },
                             {
                                 name: "Rahul Adhya",
-                                role: "Frontend Developer",
-                                bio: "Turns designs into responsive experiences.",
-                            },
-                            {
-                                name: "Sanket Adhikary",
-                                role: "Frontend Developer",
-                                bio: "Turns designs into responsive experiences.",
+                                role: "UI/UX Designer",
+
+                                github: "Rahul69-69",
                             },
                         ].map((member, index) => (
                             <div
@@ -166,20 +166,29 @@ const About = () => {
                             >
                                 <div className="w-24 h-24 rounded-full bg-gray-200 mb-4 mx-auto flex items-center justify-center text-gray-500 overflow-hidden">
                                     <img
-                                        src={`src/shared/assets/images/${
-                                            member.name.split(" ")[0]
-                                        }.jpg`}
-                                        alt="Member Picture"
+                                        src={`https://github.com/${member.github}.png`}
+                                        alt="GitHub Profile Picture"
+                                        referrerPolicy="no-referrer"
                                     />
                                 </div>
                                 <h3 className="text-xl font-bold text-center mb-1">
                                     {member.name}
                                 </h3>
-                                <p className="text-gray-600 text-center mb-3">
-                                    {member.role}
-                                </p>
+                                <div className="flex flex-row justify-center gap-2">
+                                    <FaGithub className="text-xl" />
+                                    <p className="text-gray-600 text-center mb-3">
+                                        <a
+                                            href={`https://github.com/${member.github}`}
+                                            className=""
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            @{member.github}
+                                        </a>
+                                    </p>
+                                </div>
                                 <p className="text-gray-700 text-center">
-                                    {member.bio}
+                                    {member.role}
                                 </p>
                             </div>
                         ))}

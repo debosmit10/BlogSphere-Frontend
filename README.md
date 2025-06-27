@@ -145,18 +145,16 @@ yarn preview
 
 ## 📱 Application Pages
 
-| Page                | Route              | Description                                  | Authentication | Screenshot                              |
-| ------------------- | ------------------ | -------------------------------------------- | -------------- | --------------------------------------- |
-| **Landing Page**    | `/`                | Welcome page with platform introduction      | Public         | ![Landing](screenshots/landing.png)     |
-| **Authentication**  | `/authentication`  | Login and registration forms                 | Public         | ![Auth](screenshots/authentication.png) |
-| **Home Feed**       | `/home`            | Main dashboard with personalized blog feed   | Protected      | ![Home](screenshots/home.png)           |
-| **Blog Reader**     | `/blog/:id`        | Individual blog post with comments           | Protected      | ![Blog](screenshots/blog.png)           |
-| **Write Blog**      | `/write`           | Rich text editor for creating new blogs      | Protected      | ![Write](screenshots/write.png)         |
-| **Edit Blog**       | `/edit/:id`        | Edit existing blog posts                     | Protected      | ![Edit](screenshots/edit.png)           |
-| **User Profile**    | `/profile/:userId` | User profile with blogs and followers        | Protected      | ![Profile](screenshots/profile.png)     |
-| **Admin Dashboard** | `/admin/dashboard` | Administrative panel for platform management | Admin Only     | ![Admin](screenshots/admin.png)         |
-| **About Us**        | `/about`           | Information about the platform               | Public         | ![About](screenshots/about.png)         |
-| **Contact**         | `/contact`         | Contact form and support information         | Public         | ![Contact](screenshots/contact.png)     |
+| Page                | Description                                  | Screenshot                               |
+| ------------------- | -------------------------------------------- | ---------------------------------------- |
+| **Landing Page**    | Welcome page with platform introduction      | ![Landing](screenshots/LandingPage.png)  |
+| **Authentication**  | Login and registration forms                 | ![Auth](screenshots/Login.png)           |
+| **Home Feed**       | Main dashboard with personalized blog feed   | ![Home](screenshots/Home.png)            |
+| **Blog Page**       | Individual blog post with comments           | ![Blog](screenshots/Blog.png)            |
+| **Write Blog**      | Blog creation with AI text enhancing         | ![Write](screenshots/Write.png)          |
+| **Edit Blog**       | Edit existing blog posts                     | ![Edit](screenshots/Edit.png)            |
+| **User Profile**    | User profile with blogs and followers        | ![Profile](screenshots/Profile.png)      |
+| **Admin Dashboard** | Administrative panel for platform management | ![Admin](screenshots/AdminDashboard.png) |
 
 ### 🎨 UI Components
 
@@ -233,10 +231,9 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 -   **🎉 Major Features**
     -   ✅ Complete authentication system with JWT integration
     -   ✅ Full CRUD operations for blog management
-    -   ✅ Interactive comment system with likes and replies
+    -   ✅ Interactive comment system with likes
     -   ✅ User profile management with follow/unfollow functionality
     -   ✅ Advanced blog feed with topic-based filtering
-    -   ✅ Responsive design optimized for all devices
     -   ✅ Admin dashboard with comprehensive management tools
 
 </details>
